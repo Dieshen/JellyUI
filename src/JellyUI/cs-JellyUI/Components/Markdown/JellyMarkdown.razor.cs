@@ -12,7 +12,7 @@ namespace JellyUI
         private const string PATTERN_UNORDERED_LIST = @"^\s*\-\s";
         private const string PATTERN_HORIZONTAL_RULES = @"^\-{3,}$";
         private const string PATTERN_BLOCKQUOTES = @"^>{1,}\s(.*)";
-        private string? html;
+        private string html = string.Empty;
         #endregion
 
         #region Properties, Indexers
@@ -612,6 +612,7 @@ namespace JellyUI
                 RenderTreeBuilder builder = new();
                 ChildContent.Invoke(builder);
 
+#pragma warning disable BL0006 // Do not use RenderTree types
                 Microsoft.AspNetCore.Components.RenderTree.RenderTreeFrame[] frames = builder.GetFrames().Array;
 
                 foreach (Microsoft.AspNetCore.Components.RenderTree.RenderTreeFrame frame in frames)
@@ -622,6 +623,7 @@ namespace JellyUI
                         if (lines.Any())
                             inputs.AddRange(lines);
                     }
+#pragma warning restore BL0006 // Do not use RenderTree types
             }
 
             if (inputs.Any())
