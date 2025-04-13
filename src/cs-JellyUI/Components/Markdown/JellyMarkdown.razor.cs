@@ -107,7 +107,7 @@ namespace JellyUI
             return string.Join("", parsedLines);
         }
 
-        // Blockquotes
+        // BlockQuotes
         private string ConvertMarkdownBlockquotesToHtml(string markup)
         {
             string[] lines = markup.Split("\n");
@@ -328,7 +328,7 @@ namespace JellyUI
             return html;
         }
 
-        // Inline code
+        // In-line code
         private string ConvertMarkdownInlineCodeToHtml(string markup)
         {
             // Pattern to match inline Markdown code syntax: `code`
