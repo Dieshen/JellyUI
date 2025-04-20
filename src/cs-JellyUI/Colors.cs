@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace JellyUI
+namespace Jelly.UI
 {
     [ExcludeFromCodeCoverage]
     public static class Colors

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using System.Text.RegularExpressions;
 
-namespace JellyUI
+namespace Jelly.UI
 {
     public partial class JellyMarkdown
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
-namespace JellyUI
+namespace Jelly.UI
 {
     public abstract class JellyComponentBase : ComponentBase
     {
