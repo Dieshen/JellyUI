@@ -11,8 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
-		LICENSE = LICENSE
 		README.md = README.md
+		LICENSE.txt = LICENSE.txt
 	EndProjectSection
 EndProject
 Global
