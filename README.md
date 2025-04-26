@@ -1,4 +1,4 @@
-# Vibe.UI
+Vibe.UI
 ======
 
 Vibe.UI is a powerful theme-enabled Blazor component library inspired by Shadcn UI, built primarily with Razor components and C#. This library provides comprehensive theme management capabilities along with beautiful, responsive UI components.
