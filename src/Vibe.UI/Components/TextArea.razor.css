@@ -1,0 +1,35 @@
+.vibe-textarea {
+    display: block;
+    width: 100%;
+    min-height: 80px;
+    padding: 0.75rem 1rem;
+    border-radius: var(--vibe-radius);
+    border: 1px solid var(--vibe-border);
+    background-color: var(--vibe-input);
+    color: var(--vibe-foreground);
+    font-family: var(--vibe-font);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.vibe-textarea:hover:not(:disabled):not(:read-only) {
+    border-color: color-mix(in srgb, var(--vibe-border) 80%, var(--vibe-foreground));
+}
+
+.vibe-textarea:focus:not(:disabled):not(:read-only) {
+    border-color: var(--vibe-ring);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--vibe-ring) 25%, transparent);
+}
+
+.vibe-textarea:disabled,
+.vibe-textarea:read-only {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vibe-textarea::placeholder {
+    color: var(--vibe-muted-foreground);
+}

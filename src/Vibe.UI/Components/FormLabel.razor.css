@@ -1,0 +1,11 @@
+.vibe-form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--vibe-foreground);
+    user-select: none;
+}
+
+.vibe-form-label .required-indicator {
+    color: var(--vibe-destructive, #ef4444);
+    margin-left: 0.25rem;
+}

@@ -1,0 +1,88 @@
+@namespace VibeUI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass" @ref="PopoverRef">
+    <div class="popover-trigger" @onclick="TogglePopover">
+        @TriggerContent
+    </div>
+    
+    @if (IsOpen)
+    {
+        <div class="popover-content @PositionClass">
+            @Content
+        </div>
+        
+        <div class="popover-backdrop" @onclick="ClosePopover"></div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the trigger content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment TriggerContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the popover content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment Content { get; set; }
+
+    /// <summary>
+    /// Gets or sets the position of the popover.
+    /// </summary>
+    [Parameter]
+    public string Position { get; set; } = "bottom";
+
+    /// <summary>
+    /// Gets or sets the alignment of the popover.
+    /// </summary>
+    [Parameter]
+    public string Align { get; set; } = "center";
+
+    /// <summary>
+    /// Gets or sets whether the popover closes when clicking outside.
+    /// </summary>
+    [Parameter]
+    public bool CloseOnClickOutside { get; set; } = true;
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-popover";
+
+    /// <summary>
+    /// Gets the CSS class for the popover position/alignment.
+    /// </summary>
+    private string PositionClass => $"popover-{Position} popover-{Align}";
+
+    /// <summary>
+    /// Flag to track if the popover is open.
+    /// </summary>
+    private bool IsOpen = false;
+
+    /// <summary>
+    /// Reference to the popover element.
+    /// </summary>
+    private ElementReference PopoverRef;
+
+    /// <summary>
+    /// Toggles the popover state.
+    /// </summary>
+    private void TogglePopover()
+    {
+        IsOpen = !IsOpen;
+    }
+
+    /// <summary>
+    /// Closes the popover.
+    /// </summary>
+    private void ClosePopover()
+    {
+        if (CloseOnClickOutside)
+        {
+            IsOpen = false;
+        }
+    }
+}

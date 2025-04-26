@@ -1,0 +1,99 @@
+.vibe-tooltip {
+    position: relative;
+    display: inline-flex;
+}
+
+.vibe-tooltip .trigger {
+    display: inline-flex;
+}
+
+.vibe-tooltip .tooltip-content {
+    position: absolute;
+    z-index: 50;
+    max-width: 250px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--vibe-popover-bg, var(--vibe-background));
+    color: var(--vibe-popover-foreground, var(--vibe-foreground));
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s;
+    overflow-wrap: break-word;
+    border: 1px solid var(--vibe-border);
+}
+
+.vibe-tooltip .tooltip-content.visible {
+    visibility: visible;
+}
+
+/* Placements */
+.vibe-tooltip-top .tooltip-content {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+.vibe-tooltip-top .tooltip-content::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--vibe-border);
+}
+
+.vibe-tooltip-bottom .tooltip-content {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+}
+
+.vibe-tooltip-bottom .tooltip-content::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid var(--vibe-border);
+}
+
+.vibe-tooltip-left .tooltip-content {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-4px);
+}
+
+.vibe-tooltip-left .tooltip-content::before {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid var(--vibe-border);
+}
+
+.vibe-tooltip-right .tooltip-content {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(4px);
+}
+
+.vibe-tooltip-right .tooltip-content::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid var(--vibe-border);
+}

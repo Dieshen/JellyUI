@@ -1,0 +1,30 @@
+.vibe-theme-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    padding: 2rem;
+}
+
+.vibe-theme-loading-spinner {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--vibe-primary, #0066cc);
+    animation: vibe-spinner 0.8s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.vibe-theme-loading-text {
+    font-family: var(--vibe-font, sans-serif);
+    font-size: 16px;
+    color: var(--vibe-foreground, #333333);
+}
+
+@keyframes vibe-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}

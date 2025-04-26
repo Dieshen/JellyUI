@@ -1,0 +1,96 @@
+.vibe-hovercard {
+    position: relative;
+    display: inline-flex;
+}
+
+.vibe-hovercard .hovercard-trigger {
+    display: inline-flex;
+}
+
+.vibe-hovercard .hovercard-content {
+    position: absolute;
+    z-index: 50;
+    width: 320px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--vibe-popover-bg, var(--vibe-background));
+    color: var(--vibe-popover-foreground, var(--vibe-foreground));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--vibe-border);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    overflow-wrap: break-word;
+}
+
+/* Positions */
+.vibe-hovercard .hovercard-content.hovercard-top {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-0.5rem);
+    margin-bottom: 0.5rem;
+}
+
+.vibe-hovercard .hovercard-content.hovercard-bottom {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(0.5rem);
+    margin-top: 0.5rem;
+}
+
+.vibe-hovercard .hovercard-content.hovercard-left {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-0.5rem);
+    margin-right: 0.5rem;
+}
+
+.vibe-hovercard .hovercard-content.hovercard-right {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(0.5rem);
+    margin-left: 0.5rem;
+}
+
+/* Arrows */
+.vibe-hovercard .hovercard-content::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: var(--vibe-popover-bg, var(--vibe-background));
+    border: 1px solid var(--vibe-border);
+    transform: rotate(45deg);
+}
+
+.vibe-hovercard .hovercard-content.hovercard-top::before {
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    border-top: none;
+    border-left: none;
+}
+
+.vibe-hovercard .hovercard-content.hovercard-bottom::before {
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    border-bottom: none;
+    border-right: none;
+}
+
+.vibe-hovercard .hovercard-content.hovercard-left::before {
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    border-left: none;
+    border-bottom: none;
+}
+
+.vibe-hovercard .hovercard-content.hovercard-right::before {
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    border-right: none;
+    border-top: none;
+}

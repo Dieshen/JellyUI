@@ -1,0 +1,89 @@
+.vibe-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: var(--vibe-radius);
+    border: 1px solid var(--vibe-border);
+    background-color: var(--vibe-card);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    font-family: var(--vibe-font);
+}
+
+.vibe-card-header {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+.vibe-card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--vibe-card-foreground);
+}
+
+.vibe-card-subtitle {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.875rem;
+    color: var(--vibe-muted-foreground);
+}
+
+.vibe-card-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+}
+
+.vibe-card-body {
+    padding: 1.5rem;
+}
+
+.vibe-card-footer {
+    display: flex;
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-top: 1px solid transparent;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* Card variants */
+.vibe-card-default {
+    border: 1px solid var(--vibe-border);
+}
+
+.vibe-card-elevated {
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.vibe-card-outlined {
+    background-color: transparent;
+    border: 2px solid var(--vibe-border);
+}
+
+.vibe-card-compact .vibe-card-header {
+    padding: 0.75rem 1rem;
+}
+
+.vibe-card-compact .vibe-card-body {
+    padding: 1rem;
+}
+
+.vibe-card-compact .vibe-card-footer {
+    padding: 0.75rem 1rem;
+}
+
+.vibe-card-interactive {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid var(--vibe-border);
+}
+
+.vibe-card-interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}

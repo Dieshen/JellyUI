@@ -1,0 +1,60 @@
+.vibe-resizable {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.resizable-panel {
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.resizable-handle {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    user-select: none;
+}
+
+.resizable-handle-horizontal {
+    top: 0;
+    right: -5px;
+    bottom: 0;
+    width: 10px;
+    cursor: col-resize;
+}
+
+.resizable-handle-vertical {
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    cursor: row-resize;
+}
+
+.resizable-handle-bar {
+    width: 3px;
+    height: 24px;
+    background-color: var(--vibe-border);
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+
+.resizable-handle-horizontal .resizable-handle-bar {
+    width: 3px;
+    height: 24px;
+}
+
+.resizable-handle-vertical .resizable-handle-bar {
+    width: 24px;
+    height: 3px;
+}
+
+.resizable-handle:hover .resizable-handle-bar,
+.resizable-handle:active .resizable-handle-bar {
+    background-color: var(--vibe-primary);
+}

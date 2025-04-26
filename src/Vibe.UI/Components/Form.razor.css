@@ -1,0 +1,17 @@
+.vibe-form {
+    width: 100%;
+}
+
+.vibe-form .validation-summary {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--vibe-destructive, #ef4444);
+    background-color: var(--vibe-destructive-lighter, rgba(239, 68, 68, 0.1));
+    color: var(--vibe-destructive-foreground, #ffffff);
+    font-size: 0.875rem;
+}
+
+.vibe-form .validation-summary:empty {
+    display: none;
+}

@@ -1,0 +1,15 @@
+.vibe-collapsible {
+    width: 100%;
+}
+
+.vibe-collapsible .collapsible-content {
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.vibe-collapsible .collapsible-content.expanded {
+    height: auto;
+    opacity: 1;
+}

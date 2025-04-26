@@ -1,0 +1,44 @@
+.vibe-context-menu-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: var(--context-menu-item-padding, 0.5rem 0.75rem);
+    font-size: 0.875rem;
+    color: var(--vibe-foreground);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.vibe-context-menu-item:hover:not(.disabled) {
+    background-color: var(--context-menu-item-hover-bg, var(--vibe-accent));
+    color: var(--context-menu-item-hover-color, var(--vibe-accent-foreground));
+}
+
+.vibe-context-menu-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vibe-context-menu-item .context-item-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.vibe-context-menu-item .context-item-content {
+    flex: 1;
+}
+
+.vibe-context-menu-item .context-item-shortcut {
+    margin-left: 1rem;
+    color: var(--vibe-muted-foreground);
+    font-size: 0.75rem;
+}
+
+.vibe-context-menu-item:hover .context-item-shortcut {
+    color: inherit;
+}

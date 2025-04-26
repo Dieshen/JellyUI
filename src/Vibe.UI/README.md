@@ -1,7 +1,6 @@
-# Vibe.UI
-======
+# VibeUI - Blazor Component Library with Theme Management
 
-Vibe.UI is a powerful theme-enabled Blazor component library inspired by Shadcn UI, built primarily with Razor components and C#. This library provides comprehensive theme management capabilities along with beautiful, responsive UI components.
+VibeUI is a powerful theme-enabled Blazor component library inspired by Shadcn UI, built primarily with Razor components and C#. This library provides comprehensive theme management capabilities along with beautiful, responsive UI components.
 
 ## Features
 
@@ -19,26 +18,26 @@ Vibe.UI is a powerful theme-enabled Blazor component library inspired by Shadcn 
 
 ### Installation
 
-First, add the Vibe.UI library to your Blazor project:
+First, add the VibeUI library to your Blazor project:
 
 ```bash
-dotnet add package Vibe.UI
+dotnet add package VibeUI
 ```
 
 ### Register Services
 
-In your `Program.cs` file (or `Startup.cs` for Blazor Server), register the Vibe.UI services:
+In your `Program.cs` file (or `Startup.cs` for Blazor Server), register the VibeUI services:
 
 ```csharp
-using Vibe.UI;
+using VibeUI;
 
 // ...
 
 // Basic setup with default options
-builder.Services.AddVibe.UI();
+builder.Services.AddVibeUI();
 
 // OR with customized options
-builder.Services.AddVibe.UI(options => {
+builder.Services.AddVibeUI(options => {
     options.DefaultThemeId = "dark"; 
     options.PersistTheme = true;
     
@@ -54,7 +53,7 @@ builder.Services.AddVibe.UI(options => {
 In your `App.razor` file, wrap your application with the `ThemeRoot` component:
 
 ```razor
-@using Vibe.UI.Components
+@using VibeUI.Components
 
 <ThemeRoot>
     <Router AppAssembly="@typeof(App).Assembly">
@@ -74,13 +73,13 @@ In your `App.razor` file, wrap your application with the `ThemeRoot` component:
 
 ### Add CSS Import
 
-In your `index.html` (for Blazor WebAssembly) or `_Host.cshtml` (for Blazor Server) file, make sure to add the Vibe.UI JavaScript:
+In your `index.html` (for Blazor WebAssembly) or `_Host.cshtml` (for Blazor Server) file, make sure to add the VibeUI JavaScript:
 
 ```html
-<script src="_content/Vibe.UI/themeInterop.js"></script>
+<script src="_content/VibeUI/themeInterop.js"></script>
 ```
 
-## Using Vibe.UI Components
+## Using VibeUI Components
 
 ### Button
 
@@ -141,7 +140,7 @@ Add a complete theme customization panel:
 Extend the `ThemedComponentBase` class to create your own themed components:
 
 ```razor
-@inherits Vibe.UI.Base.ThemedComponentBase
+@inherits VibeUI.Base.ThemedComponentBase
 
 <div class="@CombinedClass">
     <!-- Your component's HTML -->
@@ -211,7 +210,7 @@ Enable automatic system theme detection in your `ThemeRoot` component:
 You can integrate external CSS frameworks:
 
 ```csharp
-builder.Services.AddVibe.UI(options => {
+builder.Services.AddVibeUI(options => {
     // Configure Material Design themes
     options.AddMaterialTheme(provider => {
         provider.Name = "Light";
@@ -234,7 +233,7 @@ builder.Services.AddVibe.UI(options => {
 
 ## CSS Variables
 
-Vibe.UI uses CSS variables for theming. Here are the main variables:
+VibeUI uses CSS variables for theming. Here are the main variables:
 
 | Variable | Purpose |
 |----------|---------|
@@ -258,7 +257,7 @@ Vibe.UI uses CSS variables for theming. Here are the main variables:
 
 ## Available Components
 
-Vibe.UI includes the following components:
+VibeUI includes the following components:
 
 - **Layout**: AspectRatio, Card, Separator, ResizablePanel
 - **Data Display**: Avatar, Badge, Table, DataTable, Progress

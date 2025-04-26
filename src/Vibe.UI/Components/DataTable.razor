@@ -1,0 +1,356 @@
+@namespace VibeUI.Components
+@typeparam TItem
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass">
+    @if (ShowToolbar)
+    {
+        <div class="datatable-toolbar">
+            @if (ShowSearch)
+            {
+                <div class="datatable-search">
+                    <div class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                    </div>
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="@SearchPlaceholder" 
+                        @bind-value="SearchText" 
+                        @bind-value:event="oninput" />
+                </div>
+            }
+            @ToolbarContent
+        </div>
+    }
+
+    <div class="datatable-container">
+        <table class="datatable-table">
+            <thead>
+                <tr>
+                    @foreach (var column in Columns)
+                    {
+                        <th class="@(column.IsSortable ? "sortable" : "")" @onclick="() => SortByColumn(column)">
+                            <div class="datatable-header-cell">
+                                <span class="header-label">@column.Title</span>
+                                @if (column.IsSortable)
+                                {
+                                    <span class="sort-icon @GetSortIconClass(column.PropertyName)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+                                    </span>
+                                }
+                            </div>
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (DisplayItems.Any())
+                {
+                    @foreach (var item in DisplayItems)
+                    {
+                        <tr class="@(RowClass?.Invoke(item) ?? "")">
+                            @foreach (var column in Columns)
+                            {
+                                <td>
+                                    @if (column.Template != null)
+                                    {
+                                        @column.Template(item)
+                                    }
+                                    else
+                                    {
+                                        @GetPropertyValue(item, column.PropertyName)
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="@Columns.Count" class="datatable-empty">
+                            @EmptyMessage
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (ShowPagination)
+    {
+        <div class="datatable-pagination">
+            <div class="pagination-info">
+                Showing @((CurrentPage - 1) * PageSize + 1) to @Math.Min(CurrentPage * PageSize, FilteredItems.Count) of @FilteredItems.Count entries
+            </div>
+            <Pagination 
+                CurrentPage="@CurrentPage"
+                TotalPages="@TotalPages"
+                PageChanged="OnPageChanged" />
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Represents a column in the data table.
+    /// </summary>
+    public class DataTableColumn<T>
+    {
+        /// <summary>
+        /// Gets or sets the column title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the property name to bind to.
+        /// </summary>
+        public string PropertyName { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the column is sortable.
+        /// </summary>
+        public bool IsSortable { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the custom template for the column.
+        /// </summary>
+        public RenderFragment<T> Template { get; set; }
+    }
+
+    /// <summary>
+    /// Gets or sets the data items.
+    /// </summary>
+    [Parameter]
+    public List<TItem> Items { get; set; } = new List<TItem>();
+
+    /// <summary>
+    /// Gets or sets the columns to display.
+    /// </summary>
+    [Parameter]
+    public List<DataTableColumn<TItem>> Columns { get; set; } = new List<DataTableColumn<TItem>>();
+
+    /// <summary>
+    /// Gets or sets the custom content for the toolbar.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ToolbarContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether to show the toolbar.
+    /// </summary>
+    [Parameter]
+    public bool ShowToolbar { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets whether to show the search box.
+    /// </summary>
+    [Parameter]
+    public bool ShowSearch { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the search placeholder text.
+    /// </summary>
+    [Parameter]
+    public string SearchPlaceholder { get; set; } = "Search...";
+
+    /// <summary>
+    /// Gets or sets whether to enable pagination.
+    /// </summary>
+    [Parameter]
+    public bool ShowPagination { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the number of items per page.
+    /// </summary>
+    [Parameter]
+    public int PageSize { get; set; } = 10;
+
+    /// <summary>
+    /// Gets or sets the message displayed when the table is empty.
+    /// </summary>
+    [Parameter]
+    public string EmptyMessage { get; set; } = "No data available";
+
+    /// <summary>
+    /// Gets or sets a function to determine the CSS class for a row.
+    /// </summary>
+    [Parameter]
+    public Func<TItem, string> RowClass { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-datatable";
+
+    /// <summary>
+    /// The current search text.
+    /// </summary>
+    private string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            _searchText = value;
+            CurrentPage = 1;
+            FilterItems();
+        }
+    }
+    private string _searchText = string.Empty;
+
+    /// <summary>
+    /// The current page number.
+    /// </summary>
+    private int CurrentPage { get; set; } = 1;
+
+    /// <summary>
+    /// The property name to sort by.
+    /// </summary>
+    private string SortProperty { get; set; }
+
+    /// <summary>
+    /// Whether to sort in ascending order.
+    /// </summary>
+    private bool SortAscending { get; set; } = true;
+
+    /// <summary>
+    /// The filtered items.
+    /// </summary>
+    private List<TItem> FilteredItems { get; set; } = new List<TItem>();
+
+    /// <summary>
+    /// The items currently displayed on the page.
+    /// </summary>
+    private List<TItem> DisplayItems => ShowPagination
+        ? FilteredItems.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList()
+        : FilteredItems;
+
+    /// <summary>
+    /// The total number of pages.
+    /// </summary>
+    private int TotalPages => (int)Math.Ceiling(FilteredItems.Count / (double)PageSize);
+
+    /// <summary>
+    /// Initialize the component.
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        FilteredItems = Items;
+    }
+
+    /// <summary>
+    /// Update filtered items when parameters change.
+    /// </summary>
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        FilterItems();
+        SortItems();
+    }
+
+    /// <summary>
+    /// Filters the items based on the search text.
+    /// </summary>
+    private void FilterItems()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            FilteredItems = Items;
+        }
+        else
+        {
+            FilteredItems = Items.Where(item => 
+                Columns.Any(column => 
+                    GetPropertyValue(item, column.PropertyName)?.ToString()
+                        ?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true)
+            ).ToList();
+        }
+
+        SortItems();
+    }
+
+    /// <summary>
+    /// Sorts the items based on the current sort property and direction.
+    /// </summary>
+    private void SortItems()
+    {
+        if (string.IsNullOrEmpty(SortProperty))
+        {
+            return;
+        }
+
+        var propertyInfo = typeof(TItem).GetProperty(SortProperty);
+        if (propertyInfo != null)
+        {
+            if (SortAscending)
+            {
+                FilteredItems = FilteredItems.OrderBy(item => propertyInfo.GetValue(item)).ToList();
+            }
+            else
+            {
+                FilteredItems = FilteredItems.OrderByDescending(item => propertyInfo.GetValue(item)).ToList();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sorts the data by the specified column.
+    /// </summary>
+    /// <param name="column">The column to sort by.</param>
+    private void SortByColumn(DataTableColumn<TItem> column)
+    {
+        if (!column.IsSortable)
+            return;
+
+        if (SortProperty == column.PropertyName)
+        {
+            SortAscending = !SortAscending;
+        }
+        else
+        {
+            SortProperty = column.PropertyName;
+            SortAscending = true;
+        }
+
+        SortItems();
+    }
+
+    /// <summary>
+    /// Gets the sort icon CSS class for a column.
+    /// </summary>
+    /// <param name="propertyName">The property name of the column.</param>
+    /// <returns>The CSS class for the sort icon.</returns>
+    private string GetSortIconClass(string propertyName)
+    {
+        if (SortProperty != propertyName)
+            return string.Empty;
+
+        return SortAscending ? "sort-asc" : "sort-desc";
+    }
+
+    /// <summary>
+    /// Gets the value of a property by name.
+    /// </summary>
+    /// <param name="item">The item to get the property value from.</param>
+    /// <param name="propertyName">The name of the property.</param>
+    /// <returns>The property value.</returns>
+    private object GetPropertyValue(TItem item, string propertyName)
+    {
+        if (string.IsNullOrEmpty(propertyName))
+            return null;
+
+        var property = typeof(TItem).GetProperty(propertyName);
+        return property?.GetValue(item);
+    }
+
+    /// <summary>
+    /// Handles page changes.
+    /// </summary>
+    /// <param name="page">The new page number.</param>
+    private void OnPageChanged(int page)
+    {
+        CurrentPage = page;
+    }
+}

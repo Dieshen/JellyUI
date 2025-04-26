@@ -1,0 +1,43 @@
+.vibe-form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.vibe-form-field .form-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.vibe-form-field .form-field-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--vibe-foreground);
+}
+
+.vibe-form-field .form-field-description {
+    font-size: 0.75rem;
+    color: var(--vibe-muted-foreground);
+}
+
+.vibe-form-field .form-validation-message {
+    font-size: 0.75rem;
+    color: var(--vibe-destructive, #ef4444);
+    margin-top: 0.25rem;
+}
+
+.vibe-form-field .form-validation-message:empty {
+    display: none;
+}
+
+.vibe-form-field .form-field-container.has-error .form-field-input :deep(input),
+.vibe-form-field .form-field-container.has-error .form-field-input :deep(select),
+.vibe-form-field .form-field-container.has-error .form-field-input :deep(textarea) {
+    border-color: var(--vibe-destructive, #ef4444);
+}
+
+.vibe-form-field .form-field-container.has-error .form-field-label {
+    color: var(--vibe-destructive, #ef4444);
+}

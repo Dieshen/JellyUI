@@ -1,0 +1,28 @@
+@namespace VibeUI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass">
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the content of the carousel item.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "carousel-item";
+
+    [CascadingParameter]
+    private Carousel ParentCarousel { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ParentCarousel?.AddItem(this);
+    }
+}

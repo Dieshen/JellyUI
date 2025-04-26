@@ -1,0 +1,80 @@
+.vibe-tabs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-family: var(--vibe-font);
+}
+
+.vibe-tabs-list {
+    display: flex;
+    border-bottom: 1px solid var(--vibe-border);
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.vibe-tabs-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.vibe-tabs-trigger {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--vibe-muted-foreground);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    user-select: none;
+    outline: none;
+    white-space: nowrap;
+}
+
+.vibe-tabs-trigger:hover {
+    color: var(--vibe-foreground);
+}
+
+.vibe-tabs-trigger:focus {
+    color: var(--vibe-foreground);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--vibe-ring) 25%, transparent);
+}
+
+.vibe-tabs-trigger-active {
+    color: var(--vibe-primary);
+    border-bottom-color: var(--vibe-primary);
+}
+
+.vibe-tabs-trigger:disabled {
+    color: var(--vibe-muted-foreground);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vibe-tabs-content {
+    padding: 1.25rem 0;
+}
+
+.vibe-tabs-panel {
+    display: none;
+}
+
+.vibe-tabs-panel-active {
+    display: block;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

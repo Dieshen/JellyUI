@@ -1,0 +1,197 @@
+.vibe-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+}
+
+.vibe-drawer .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fade-in 0.3s ease-in-out;
+}
+
+.vibe-drawer.closing .drawer-overlay {
+    animation: fade-out 0.3s ease-in-out;
+}
+
+.vibe-drawer .drawer-content {
+    position: fixed;
+    background-color: var(--vibe-background);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    z-index: 1001;
+}
+
+.vibe-drawer .drawer-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: var(--vibe-foreground);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.vibe-drawer .drawer-close:hover {
+    background-color: var(--vibe-muted);
+}
+
+.vibe-drawer .drawer-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Drawer positions */
+.vibe-drawer.drawer-right .drawer-content {
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24rem;
+    max-width: 100%;
+    animation: slide-in-right 0.3s ease-in-out;
+}
+
+.vibe-drawer.drawer-right.closing .drawer-content {
+    animation: slide-out-right 0.3s ease-in-out;
+}
+
+.vibe-drawer.drawer-left .drawer-content {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 24rem;
+    max-width: 100%;
+    animation: slide-in-left 0.3s ease-in-out;
+}
+
+.vibe-drawer.drawer-left.closing .drawer-content {
+    animation: slide-out-left 0.3s ease-in-out;
+}
+
+.vibe-drawer.drawer-top .drawer-content {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 24rem;
+    max-height: 100%;
+    animation: slide-in-top 0.3s ease-in-out;
+}
+
+.vibe-drawer.drawer-top.closing .drawer-content {
+    animation: slide-out-top 0.3s ease-in-out;
+}
+
+.vibe-drawer.drawer-bottom .drawer-content {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 24rem;
+    max-height: 100%;
+    animation: slide-in-bottom 0.3s ease-in-out;
+}
+
+.vibe-drawer.drawer-bottom.closing .drawer-content {
+    animation: slide-out-bottom 0.3s ease-in-out;
+}
+
+/* Animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-out-right {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-out-left {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slide-in-top {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-out-top {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes slide-in-bottom {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-out-bottom {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}

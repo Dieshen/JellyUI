@@ -1,0 +1,93 @@
+@using Microsoft.AspNetCore.Components.Forms
+@inherits ThemedComponentBase
+
+<div class="@GetContainerClass()">
+    <label class="@GetLabelClass()" for="@Id">@Label</label>
+    <div class="vibe-input-wrapper">
+        @if (!string.IsNullOrEmpty(LeadingIcon))
+        {
+            <span class="vibe-input-icon vibe-input-icon-leading">@((MarkupString)LeadingIcon)</span>
+        }
+        <input type="@Type"
+               class="@GetInputClass()"
+               id="@Id"
+               placeholder="@Placeholder"
+               value="@Value"
+               @onchange="OnValueChanged"
+               @oninput="OnInput"
+               disabled="@Disabled"
+               readonly="@ReadOnly" />
+        @if (!string.IsNullOrEmpty(TrailingIcon))
+        {
+            <span class="vibe-input-icon vibe-input-icon-trailing">@((MarkupString)TrailingIcon)</span>
+        }
+    </div>
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="vibe-input-error">@ErrorMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(HelperText))
+    {
+        <div class="vibe-input-helper">@HelperText</div>
+    }
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; } = Guid.NewGuid().ToString();
+    [Parameter] public string Label { get; set; } = string.Empty;
+    [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public string Placeholder { get; set; } = string.Empty;
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public bool ReadOnly { get; set; } = false;
+    [Parameter] public string LeadingIcon { get; set; } = string.Empty;
+    [Parameter] public string TrailingIcon { get; set; } = string.Empty;
+    [Parameter] public string ErrorMessage { get; set; } = string.Empty;
+    [Parameter] public string HelperText { get; set; } = string.Empty;
+    [Parameter] public string Size { get; set; } = "medium"; // small, medium, large
+    [Parameter] public string Variant { get; set; } = "outline"; // outline, filled
+
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? string.Empty;
+        await ValueChanged.InvokeAsync(Value);
+    }
+
+    private async Task OnInput(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? string.Empty;
+        await ValueChanged.InvokeAsync(Value);
+    }
+
+    private string GetContainerClass()
+    {
+        var classes = new List<string> { "vibe-input-container" };
+        if (Disabled) classes.Add("vibe-input-disabled");
+        return string.Join(" ", classes);
+    }
+
+    private string GetLabelClass()
+    {
+        return "vibe-input-label";
+    }
+
+    private string GetInputClass()
+    {
+        var classes = new List<string> { "vibe-input" };
+        
+        if (!string.IsNullOrEmpty(LeadingIcon))
+            classes.Add("vibe-input-with-leading-icon");
+        
+        if (!string.IsNullOrEmpty(TrailingIcon))
+            classes.Add("vibe-input-with-trailing-icon");
+        
+        if (!string.IsNullOrEmpty(ErrorMessage))
+            classes.Add("vibe-input-error-state");
+        
+        classes.Add($"vibe-input-{Size}");
+        classes.Add($"vibe-input-{Variant}");
+        
+        return string.Join(" ", classes);
+    }
+}

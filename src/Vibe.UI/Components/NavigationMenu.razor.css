@@ -1,0 +1,46 @@
+.vibe-navigation-menu {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.navigation-menu-list {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid transparent;
+}
+
+.navigation-menu-viewport-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--vibe-primary);
+    transition: all 200ms ease;
+}
+
+.navigation-menu-viewport {
+    position: relative;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--vibe-popover-background, var(--vibe-background));
+    border: 1px solid var(--vibe-border);
+    box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+    overflow: hidden;
+    transform-origin: top center;
+    animation: scaleIn 0.2s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scaleY(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}

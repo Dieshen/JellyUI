@@ -1,0 +1,27 @@
+@namespace VibeUI.Components
+@inherits Base.ThemedComponentBase
+
+<nav class="@CombinedClass" aria-label="Breadcrumb">
+    <ol class="breadcrumb-list">
+        @ChildContent
+    </ol>
+</nav>
+
+@code {
+    /// <summary>
+    /// Gets or sets the content of the breadcrumb.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the separator used between items.
+    /// </summary>
+    [Parameter]
+    public string Separator { get; set; } = "/";
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-breadcrumb";
+}

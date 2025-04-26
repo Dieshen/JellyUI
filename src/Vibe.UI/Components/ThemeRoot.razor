@@ -1,0 +1,96 @@
+@using VibeUI.Themes.Services
+@implements IAsyncDisposable
+
+<CascadingValue Value="ThemeManager">
+    @if (_initialized)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <div class="vibe-theme-loading">
+            @if (LoadingContent != null)
+            {
+                @LoadingContent
+            }
+            else
+            {
+                <div class="vibe-theme-loading-spinner"></div>
+                <div class="vibe-theme-loading-text">Initializing theme...</div>
+            }
+        </div>
+    }
+</CascadingValue>
+
+@code {
+    [Inject]
+    private ThemeManager ThemeManager { get; set; }
+
+    /// <summary>
+    /// Gets or sets the child content of the theme root
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the content to display while the theme is initializing
+    /// </summary>
+    [Parameter]
+    public RenderFragment LoadingContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether to automatically detect system theme changes
+    /// </summary>
+    [Parameter]
+    public bool AutoDetectSystemTheme { get; set; } = true;
+
+    private bool _initialized = false;
+    private DotNetObjectReference<ThemeRoot> _objRef;
+
+    /// <inheritdoc/>
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _objRef = DotNetObjectReference.Create(this);
+        
+        await ThemeManager.InitializeAsync();
+
+        if (AutoDetectSystemTheme)
+        {
+            await JS.InvokeVoidAsync(
+                "VibeUI.Themes.registerSystemThemeListener",
+                _objRef,
+                nameof(OnSystemThemeChanged));
+        }
+
+        _initialized = true;
+    }
+
+    /// <summary>
+    /// Handles system theme change events
+    /// </summary>
+    /// <param name="isDarkMode">Whether the system theme is dark mode</param>
+    [JSInvokable]
+    public async Task OnSystemThemeChanged(bool isDarkMode)
+    {
+        var themeId = isDarkMode ? "dark" : "light";
+        var theme = ThemeManager.AvailableThemes.FirstOrDefault(t => t.Id == themeId);
+        
+        if (theme != null)
+        {
+            await ThemeManager.SetThemeAsync(theme);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync()
+    {
+        if (AutoDetectSystemTheme)
+        {
+            await JS.InvokeVoidAsync("VibeUI.Themes.unregisterSystemThemeListener");
+        }
+        
+        _objRef?.Dispose();
+    }
+}

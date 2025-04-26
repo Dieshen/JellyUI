@@ -1,0 +1,82 @@
+.vibe-alert-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.vibe-alert-dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+}
+
+.vibe-alert-dialog-content {
+    position: relative;
+    background-color: var(--background);
+    color: var(--foreground);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    max-width: 90%;
+    width: 32rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 1002;
+}
+
+.vibe-alert-dialog-header {
+    margin-bottom: 1rem;
+}
+
+.vibe-alert-dialog-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--foreground);
+}
+
+.vibe-alert-dialog-description {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}
+
+.vibe-alert-dialog-body {
+    margin-bottom: 1rem;
+}
+
+.vibe-alert-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.vibe-alert-dialog-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--muted-foreground);
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+}
+
+.vibe-alert-dialog-close:hover {
+    background-color: var(--muted);
+}

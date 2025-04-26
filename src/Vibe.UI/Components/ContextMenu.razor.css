@@ -1,0 +1,47 @@
+.vibe-context-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.vibe-context-menu .context-trigger {
+    display: inline-block;
+}
+
+.vibe-context-menu .context-content {
+    position: fixed;
+    z-index: 1000;
+    min-width: 8rem;
+    max-width: 20rem;
+    padding: 0.5rem;
+    background-color: var(--vibe-popover-bg, var(--vibe-background));
+    border-radius: 0.375rem;
+    border: 1px solid var(--vibe-border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: scale-in 0.2s ease;
+    transform-origin: top left;
+}
+
+.vibe-context-menu .context-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+}
+
+/* Context menu item styling - for use in the Content section */
+:root {
+    --context-menu-item-padding: 0.5rem 0.75rem;
+    --context-menu-item-hover-bg: var(--vibe-accent);
+    --context-menu-item-hover-color: var(--vibe-accent-foreground);
+}
+
+/* Animation */
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

@@ -1,0 +1,103 @@
+.vibe-calendar {
+    width: 100%;
+    max-width: 320px;
+    background-color: var(--vibe-background);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--vibe-border);
+    padding: 1rem;
+    font-size: 0.875rem;
+    user-select: none;
+}
+
+.vibe-calendar .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.vibe-calendar .calendar-nav-button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--vibe-border);
+    border-radius: 0.25rem;
+    color: var(--vibe-foreground);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.vibe-calendar .calendar-nav-button:hover {
+    background-color: var(--vibe-muted);
+}
+
+.vibe-calendar .calendar-month-year {
+    font-weight: 500;
+    color: var(--vibe-foreground);
+    flex: 1;
+    text-align: center;
+}
+
+.vibe-calendar .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.vibe-calendar .calendar-weekday {
+    color: var(--vibe-muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+}
+
+.vibe-calendar .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.vibe-calendar .calendar-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+    color: var(--vibe-foreground);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vibe-calendar .calendar-day.empty {
+    cursor: default;
+}
+
+.vibe-calendar .calendar-day:hover:not(.empty):not(.disabled):not(.selected) {
+    background-color: var(--vibe-accent-subtle, rgba(0, 0, 0, 0.05));
+}
+
+.vibe-calendar .calendar-day.selected {
+    background-color: var(--vibe-primary);
+    color: var(--vibe-primary-foreground);
+    font-weight: 500;
+}
+
+.vibe-calendar .calendar-day.today:not(.selected) {
+    border: 1px solid var(--vibe-primary);
+    font-weight: 500;
+}
+
+.vibe-calendar .calendar-day.disabled {
+    color: var(--vibe-muted);
+    cursor: not-allowed;
+    opacity: 0.5;
+}

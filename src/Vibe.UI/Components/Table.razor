@@ -1,0 +1,101 @@
+@namespace VibeUI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass">
+    <table class="table-root">
+        @if (HeaderContent != null)
+        {
+            <thead class="table-header">
+                @HeaderContent
+            </thead>
+        }
+        <tbody class="table-body">
+            @ChildContent
+        </tbody>
+        @if (FooterContent != null)
+        {
+            <tfoot class="table-footer">
+                @FooterContent
+            </tfoot>
+        }
+    </table>
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the content of the table.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the header content of the table.
+    /// </summary>
+    [Parameter]
+    public RenderFragment HeaderContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the footer content of the table.
+    /// </summary>
+    [Parameter]
+    public RenderFragment FooterContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the table has borders.
+    /// </summary>
+    [Parameter]
+    public bool Bordered { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the table rows are zebra-striped.
+    /// </summary>
+    [Parameter]
+    public bool Striped { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the table is compact.
+    /// </summary>
+    [Parameter]
+    public bool Compact { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the table has hover effects.
+    /// </summary>
+    [Parameter]
+    public bool Hover { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => GetTableClass();
+
+    /// <summary>
+    /// Gets the CSS classes for the table based on properties.
+    /// </summary>
+    private string GetTableClass()
+    {
+        var classes = new List<string> { "vibe-table" };
+        
+        if (Bordered)
+        {
+            classes.Add("bordered");
+        }
+        
+        if (Striped)
+        {
+            classes.Add("striped");
+        }
+        
+        if (Compact)
+        {
+            classes.Add("compact");
+        }
+        
+        if (Hover)
+        {
+            classes.Add("hover");
+        }
+        
+        return string.Join(" ", classes);
+    }
+}

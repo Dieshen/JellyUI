@@ -1,0 +1,62 @@
+.vibe-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    overflow: hidden;
+    user-select: none;
+    background-color: var(--vibe-muted);
+    border-radius: 50%;
+    position: relative;
+}
+
+.vibe-avatar[shape="square"] {
+    border-radius: 4px;
+}
+
+.vibe-avatar .avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.vibe-avatar .avatar-initials {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    color: var(--vibe-muted-foreground);
+    font-size: calc(40% + 0.3rem);
+    line-height: 1;
+}
+
+.vibe-avatar .avatar-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vibe-muted-foreground);
+}
+
+.vibe-avatar .avatar-fallback {
+    width: 100%;
+    height: 100%;
+    background-color: var(--vibe-muted);
+}
+
+.vibe-avatar.delayload {
+    animation: avatar-fade-in 0.2s ease;
+}
+
+@keyframes avatar-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,205 @@
+@namespace VibeUI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass" @attributes="AdditionalAttributes">
+    <div class="command-input-wrapper">
+        @if (!string.IsNullOrEmpty(Icon))
+        {
+            <div class="command-input-icon">@((MarkupString)Icon)</div>
+        }
+        <input 
+            @ref="InputRef"
+            type="text"
+            class="command-input"
+            placeholder="@Placeholder"
+            @bind-value="InputValue" 
+            @bind-value:event="oninput"
+            @onkeydown="OnKeyDown" 
+            @onfocus="OnFocus"
+            @onblur="OnBlur"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false" />
+    </div>
+
+    <div class="command-separator"></div>
+
+    <div class="command-list">
+        @if (FilteredItems.Any())
+        {
+            @foreach (var item in FilteredItems)
+            {
+                <div 
+                    class="command-item @(IsSelectedItem(item) ? "selected" : "")"
+                    @onclick="() => OnItemSelected(item)"
+                    @onmouseenter="() => SelectedIndex = FilteredItems.IndexOf(item)">
+                    <span class="command-item-label">@item.Label</span>
+                    @if (!string.IsNullOrEmpty(item.Shortcut))
+                    {
+                        <span class="command-item-shortcut">@item.Shortcut</span>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="command-empty">No results found.</div>
+        }
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// Represents an item in the command list.
+    /// </summary>
+    public class CommandItem
+    {
+        /// <summary>
+        /// Gets or sets the item's label.
+        /// </summary>
+        public string Label { get; set; }
+
+        /// <summary>
+        /// Gets or sets the item's value.
+        /// </summary>
+        public string Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets the item's keyboard shortcut.
+        /// </summary>
+        public string Shortcut { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the item is disabled.
+        /// </summary>
+        public bool Disabled { get; set; }
+    }
+
+    /// <summary>
+    /// Gets or sets the placeholder text for the command input.
+    /// </summary>
+    [Parameter]
+    public string Placeholder { get; set; } = "Type a command or search...";
+
+    /// <summary>
+    /// Gets or sets the items to display in the command list.
+    /// </summary>
+    [Parameter]
+    public List<CommandItem> Items { get; set; } = new List<CommandItem>();
+
+    /// <summary>
+    /// Gets or sets the icon for the command input.
+    /// </summary>
+    [Parameter]
+    public string Icon { get; set; } = "<svg width=\"15\" height=\"15\" viewBox=\"0 0 15 15\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 6.5C10 8.433 8.433 10 6.5 10C4.567 10 3 8.433 3 6.5C3 4.567 4.567 3 6.5 3C8.433 3 10 4.567 10 6.5ZM9.30884 10.0159C8.53901 10.6318 7.56251 11 6.5 11C4.01472 11 2 8.98528 2 6.5C2 4.01472 4.01472 2 6.5 2C8.98528 2 11 4.01472 11 6.5C11 7.56251 10.6318 8.53901 10.0159 9.30884L12.8536 12.1464C13.0488 12.3417 13.0488 12.6583 12.8536 12.8536C12.6583 13.0488 12.3417 13.0488 12.1464 12.8536L9.30884 10.0159Z\" fill=\"currentColor\" fill-rule=\"evenodd\" clip-rule=\"evenodd\"></path></svg>";
+
+    /// <summary>
+    /// Gets or sets the callback for when an item is selected.
+    /// </summary>
+    [Parameter]
+    public EventCallback<CommandItem> ItemSelected { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-command";
+
+    /// <summary>
+    /// Reference to the input element.
+    /// </summary>
+    private ElementReference InputRef;
+
+    /// <summary>
+    /// The current input value.
+    /// </summary>
+    private string InputValue = string.Empty;
+
+    /// <summary>
+    /// The index of the currently selected item.
+    /// </summary>
+    private int SelectedIndex = 0;
+
+    /// <summary>
+    /// Gets the filtered items based on the input value.
+    /// </summary>
+    private List<CommandItem> FilteredItems => 
+        string.IsNullOrWhiteSpace(InputValue) 
+            ? Items.Where(i => !i.Disabled).ToList() 
+            : Items.Where(i => !i.Disabled && (i.Label.Contains(InputValue, StringComparison.OrdinalIgnoreCase) || 
+                              i.Value?.Contains(InputValue, StringComparison.OrdinalIgnoreCase) == true))
+                  .ToList();
+
+    /// <summary>
+    /// Checks if the given item is the selected one.
+    /// </summary>
+    /// <param name="item">The item to check.</param>
+    /// <returns>True if the item is selected, false otherwise.</returns>
+    private bool IsSelectedItem(CommandItem item) => 
+        FilteredItems.IndexOf(item) == SelectedIndex;
+
+    /// <summary>
+    /// Handles keyboard navigation.
+    /// </summary>
+    /// <param name="e">The keyboard event args.</param>
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "ArrowDown":
+                SelectedIndex = (SelectedIndex + 1) % FilteredItems.Count;
+                break;
+                
+            case "ArrowUp":
+                SelectedIndex = (SelectedIndex - 1 + FilteredItems.Count) % FilteredItems.Count;
+                break;
+                
+            case "Enter":
+                if (FilteredItems.Count > 0 && SelectedIndex >= 0 && SelectedIndex < FilteredItems.Count)
+                {
+                    await OnItemSelected(FilteredItems[SelectedIndex]);
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Handles when an item is selected.
+    /// </summary>
+    /// <param name="item">The selected item.</param>
+    private async Task OnItemSelected(CommandItem item)
+    {
+        if (!item.Disabled)
+        {
+            InputValue = string.Empty;
+            await ItemSelected.InvokeAsync(item);
+        }
+    }
+
+    /// <summary>
+    /// Handles when the input is focused.
+    /// </summary>
+    private void OnFocus()
+    {
+        // Reset selection on focus
+        if (FilteredItems.Count > 0)
+        {
+            SelectedIndex = 0;
+        }
+    }
+
+    /// <summary>
+    /// Handles when the input loses focus.
+    /// </summary>
+    private void OnBlur()
+    {
+        // Optional: could implement timeout before closing
+    }
+
+    /// <summary>
+    /// Focuses the command input.
+    /// </summary>
+    public async Task FocusAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('[_bl_{InputRef.Id}]').focus()");
+    }
+}

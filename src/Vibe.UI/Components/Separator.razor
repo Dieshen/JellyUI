@@ -1,0 +1,28 @@
+@namespace VibeUI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass @OrientationClass" role="separator"></div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the orientation of the separator.
+    /// </summary>
+    [Parameter]
+    public string Orientation { get; set; } = "horizontal";
+
+    /// <summary>
+    /// Gets or sets whether the separator is decorative.
+    /// </summary>
+    [Parameter]
+    public bool Decorative { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-separator";
+
+    /// <summary>
+    /// Gets the CSS class for the orientation.
+    /// </summary>
+    private string OrientationClass => $"separator-{Orientation}";
+}

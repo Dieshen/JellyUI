@@ -1,0 +1,48 @@
+.vibe-input {
+    display: flex;
+    width: 100%;
+    border-radius: var(--vibe-radius);
+    border: 1px solid var(--vibe-border);
+    background-color: var(--vibe-input);
+    color: var(--vibe-foreground);
+    font-family: var(--vibe-font);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.vibe-input:hover:not(:disabled):not(:read-only) {
+    border-color: color-mix(in srgb, var(--vibe-border) 80%, var(--vibe-foreground));
+}
+
+.vibe-input:focus:not(:disabled):not(:read-only) {
+    border-color: var(--vibe-ring);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--vibe-ring) 25%, transparent);
+}
+
+.vibe-input:disabled,
+.vibe-input:read-only {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vibe-input::placeholder {
+    color: var(--vibe-muted-foreground);
+}
+
+.vibe-input-small {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 14px;
+}
+
+.vibe-input-medium {
+    height: 40px;
+    padding: 0 16px;
+    font-size: 16px;
+}
+
+.vibe-input-large {
+    height: 48px;
+    padding: 0 20px;
+    font-size: 18px;
+}

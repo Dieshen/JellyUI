@@ -1,0 +1,93 @@
+.vibe-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+
+.vibe-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--vibe-background), 0 0 0 4px var(--vibe-ring);
+}
+
+.vibe-toggle[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Variants */
+.vibe-toggle.toggle-default {
+    background-color: transparent;
+    color: var(--vibe-foreground);
+    border-color: var(--vibe-border);
+}
+
+.vibe-toggle.toggle-default:hover {
+    background-color: var(--vibe-muted);
+    color: var(--vibe-foreground);
+}
+
+.vibe-toggle.toggle-default.pressed {
+    background-color: var(--vibe-muted);
+    color: var(--vibe-foreground);
+    border-color: var(--vibe-border);
+}
+
+.vibe-toggle.toggle-outline {
+    background-color: transparent;
+    color: var(--vibe-foreground);
+    border-color: var(--vibe-border);
+}
+
+.vibe-toggle.toggle-outline:hover {
+    background-color: var(--vibe-accent);
+    color: var(--vibe-accent-foreground);
+}
+
+.vibe-toggle.toggle-outline.pressed {
+    background-color: var(--vibe-accent);
+    color: var(--vibe-accent-foreground);
+}
+
+/* Sizes */
+.vibe-toggle.toggle-default {
+    height: 2.5rem;
+    padding: 0 1rem;
+}
+
+.vibe-toggle.toggle-sm {
+    height: 2.25rem;
+    padding: 0 0.75rem;
+    font-size: 0.75rem;
+}
+
+.vibe-toggle.toggle-lg {
+    height: 2.75rem;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+}
+
+/* Icon-only toggle sizes */
+.vibe-toggle.toggle-default:has(svg:only-child),
+.vibe-toggle.toggle-default:empty {
+    width: 2.5rem;
+    padding: 0;
+}
+
+.vibe-toggle.toggle-sm:has(svg:only-child),
+.vibe-toggle.toggle-sm:empty {
+    width: 2.25rem;
+    padding: 0;
+}
+
+.vibe-toggle.toggle-lg:has(svg:only-child),
+.vibe-toggle.toggle-lg:empty {
+    width: 2.75rem;
+    padding: 0;
+}

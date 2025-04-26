@@ -1,0 +1,78 @@
+.vibe-select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.vibe-select-label {
+    font-family: var(--vibe-font);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--vibe-foreground);
+}
+
+.vibe-select-wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.vibe-select-input {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--vibe-radius);
+    border: 1px solid var(--vibe-border);
+    background-color: var(--vibe-input);
+    color: var(--vibe-foreground);
+    font-family: var(--vibe-font);
+    font-size: 0.875rem;
+    appearance: none;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    padding-right: 2.5rem;
+    cursor: pointer;
+}
+
+.vibe-select-input:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--vibe-border) 80%, var(--vibe-foreground));
+}
+
+.vibe-select-input:focus:not(:disabled) {
+    border-color: var(--vibe-ring);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--vibe-ring) 25%, transparent);
+}
+
+.vibe-select-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vibe-select-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 1rem;
+    height: 1rem;
+}
+
+.vibe-select-icon::before {
+    content: '';
+    position: absolute;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-style: solid;
+    border-width: 0.15rem 0.15rem 0 0;
+    border-color: var(--vibe-muted-foreground);
+    transform: translateY(-25%) rotate(135deg);
+}
+
+.vibe-select-helper-text {
+    font-family: var(--vibe-font);
+    font-size: 0.75rem;
+    color: var(--vibe-muted-foreground);
+}

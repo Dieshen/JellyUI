@@ -1,0 +1,64 @@
+.vibe-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 42px;
+    height: 24px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.vibe-switch.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.vibe-switch .switch-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.vibe-switch.disabled .switch-input {
+    cursor: not-allowed;
+}
+
+.vibe-switch .switch-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--vibe-muted);
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.vibe-switch .switch-thumb::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.vibe-switch .switch-input:checked + .switch-thumb {
+    background-color: var(--vibe-primary);
+}
+
+.vibe-switch .switch-input:checked + .switch-thumb::before {
+    transform: translateX(18px);
+}
+
+.vibe-switch .switch-input:focus-visible + .switch-thumb {
+    outline: 2px solid var(--vibe-ring);
+    outline-offset: 2px;
+}

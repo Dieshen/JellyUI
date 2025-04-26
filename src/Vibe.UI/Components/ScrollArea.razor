@@ -1,0 +1,157 @@
+@namespace VibeUI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass" style="@HeightStyle">
+    <div class="scroll-viewport" @ref="ViewportRef" @onscroll="OnScroll">
+        <div class="scroll-content">
+            @ChildContent
+        </div>
+    </div>
+    
+    @if (ShowScrollbar && !HideScrollbars)
+    {
+        <div class="scrollbar vertical @(IsScrollbarVisible ? "visible" : "")">
+            <div class="scrollbar-thumb" 
+                style="height: @ThumbHeight; top: @ThumbTop;"
+                @onmousedown="OnScrollbarThumbMouseDown"></div>
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the content of the scroll area.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the height of the scroll area.
+    /// </summary>
+    [Parameter]
+    public string Height { get; set; } = "200px";
+
+    /// <summary>
+    /// Gets or sets whether to show the scrollbar.
+    /// </summary>
+    [Parameter]
+    public bool ShowScrollbar { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets whether to hide the scrollbar when not scrolling.
+    /// </summary>
+    [Parameter]
+    public bool AutoHide { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether to force hiding the scrollbars.
+    /// </summary>
+    [Parameter]
+    public bool HideScrollbars { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-scroll-area";
+
+    /// <summary>
+    /// Gets the height style for the scroll area.
+    /// </summary>
+    private string HeightStyle => !string.IsNullOrEmpty(Height) ? $"height: {Height};" : "";
+
+    /// <summary>
+    /// Reference to the viewport element.
+    /// </summary>
+    private ElementReference ViewportRef;
+
+    /// <summary>
+    /// Flag to track if the scrollbar is visible.
+    /// </summary>
+    private bool IsScrollbarVisible = true;
+
+    /// <summary>
+    /// The height of the scrollbar thumb as a percentage.
+    /// </summary>
+    private string ThumbHeight = "0%";
+
+    /// <summary>
+    /// The top position of the scrollbar thumb as a percentage.
+    /// </summary>
+    private string ThumbTop = "0%";
+
+    /// <summary>
+    /// Timer for auto-hiding the scrollbar.
+    /// </summary>
+    private System.Timers.Timer _hideTimer;
+
+    /// <summary>
+    /// Set up the timer for auto-hiding the scrollbar.
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (AutoHide)
+        {
+            _hideTimer = new System.Timers.Timer(1000);
+            _hideTimer.Elapsed += (sender, e) =>
+            {
+                InvokeAsync(() =>
+                {
+                    IsScrollbarVisible = false;
+                    StateHasChanged();
+                });
+            };
+            _hideTimer.AutoReset = false;
+        }
+    }
+
+    /// <summary>
+    /// Handles the scroll event.
+    /// </summary>
+    private void OnScroll()
+    {
+        if (AutoHide)
+        {
+            IsScrollbarVisible = true;
+            _hideTimer?.Stop();
+            _hideTimer?.Start();
+        }
+        
+        // In a real implementation, you would use JS interop to calculate these values
+        // This is a simplified example
+        UpdateScrollbarThumb();
+    }
+
+    /// <summary>
+    /// Updates the scrollbar thumb size and position.
+    /// </summary>
+    private void UpdateScrollbarThumb()
+    {
+        // In a real implementation, you would get these values via JS interop
+        // For now, we're using placeholder values
+        ThumbHeight = "30%";
+        ThumbTop = "0%";
+    }
+
+    /// <summary>
+    /// Handles the mouse down event on the scrollbar thumb.
+    /// </summary>
+    private void OnScrollbarThumbMouseDown()
+    {
+        // In a real implementation, you would use JS interop for drag functionality
+    }
+
+    /// <summary>
+    /// Disposes the component.
+    /// </summary>
+    /// <param name="disposing">Whether this is being called from Dispose or the finalizer.</param>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _hideTimer?.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+}
