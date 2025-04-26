@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace VibeUI.Themes.Models
+namespace Vibe.UI.Themes.Models
 {
     /// <summary>
     /// Represents a theme in the application

@@ -1,0 +1,111 @@
+@inherits Vibe.UI.Base.ThemedComponentBase
+
+<div class="@CombinedClass" role="alert" @attributes="AdditionalAttributes">
+    @if (Icon != null)
+    {
+        <div class="vibe-alert-icon">
+            @Icon
+        </div>
+    }
+    <div class="vibe-alert-content">
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <h5 class="vibe-alert-title">@Title</h5>
+        }
+        <div class="vibe-alert-description">
+            @ChildContent
+        </div>
+    </div>
+    @if (Dismissible)
+    {
+        <button type="button" 
+                class="vibe-alert-close" 
+                aria-label="Close" 
+                @onclick="OnDismissClick">
+            <span class="vibe-alert-close-icon"></span>
+        </button>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the alert content
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the alert title
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; }
+
+    /// <summary>
+    /// Gets or sets the alert icon
+    /// </summary>
+    [Parameter]
+    public RenderFragment Icon { get; set; }
+
+    /// <summary>
+    /// Gets or sets the alert variant
+    /// </summary>
+    [Parameter]
+    public AlertVariant Variant { get; set; } = AlertVariant.Default;
+
+    /// <summary>
+    /// Gets or sets whether the alert is dismissible
+    /// </summary>
+    [Parameter]
+    public bool Dismissible { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback for when the alert is dismissed
+    /// </summary>
+    [Parameter]
+    public EventCallback OnDismiss { get; set; }
+
+    /// <inheritdoc/>
+    protected override string ComponentClass => $"vibe-alert vibe-alert-{Variant.ToString().ToLowerInvariant()}";
+
+    /// <summary>
+    /// Handles the dismiss button click
+    /// </summary>
+    private async Task OnDismissClick()
+    {
+        if (OnDismiss.HasDelegate)
+        {
+            await OnDismiss.InvokeAsync();
+        }
+    }
+
+    /// <summary>
+    /// Alert variant options
+    /// </summary>
+    public enum AlertVariant
+    {
+        /// <summary>
+        /// Default alert style
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// Destructive alert style
+        /// </summary>
+        Destructive,
+
+        /// <summary>
+        /// Success alert style
+        /// </summary>
+        Success,
+
+        /// <summary>
+        /// Info alert style
+        /// </summary>
+        Info,
+
+        /// <summary>
+        /// Warning alert style
+        /// </summary>
+        Warning
+    }
+}

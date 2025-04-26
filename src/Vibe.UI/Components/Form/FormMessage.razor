@@ -1,0 +1,40 @@
+@namespace Vibe.UI.Components
+@inherits Base.ThemedComponentBase
+
+<p class="@CombinedClass @VariantClass" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <span class="form-message-icon">@((MarkupString)Icon)</span>
+    }
+    @ChildContent
+</p>
+
+@code {
+    /// <summary>
+    /// Gets or sets the message content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the message variant (error, warning, success, info).
+    /// </summary>
+    [Parameter]
+    public string Variant { get; set; } = "default";
+
+    /// <summary>
+    /// Gets or sets the message icon as HTML.
+    /// </summary>
+    [Parameter]
+    public string Icon { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-form-message";
+
+    /// <summary>
+    /// Gets the variant CSS class.
+    /// </summary>
+    private string VariantClass => $"form-message-{Variant}";
+}

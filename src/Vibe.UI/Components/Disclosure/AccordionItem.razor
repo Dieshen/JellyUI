@@ -1,0 +1,98 @@
+@inherits Vibe.UI.Base.ThemedComponentBase
+
+<div class="@CombinedClass" @attributes="AdditionalAttributes">
+    <h3 class="vibe-accordion-item-header">
+        <button 
+            type="button" 
+            class="vibe-accordion-item-trigger"
+            @onclick="ToggleExpanded"
+            aria-expanded="@IsExpanded">
+            @Header
+            <span class="vibe-accordion-item-icon"></span>
+        </button>
+    </h3>
+    
+    <div class="vibe-accordion-item-content" style="@ContentStyle">
+        <div class="vibe-accordion-item-content-inner">
+            @Content
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _id = Guid.NewGuid().ToString();
+    
+    [CascadingParameter]
+    private Accordion Parent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the ID of the accordion item
+    /// </summary>
+    [Parameter]
+    public string Id { get; set; }
+
+    /// <summary>
+    /// Gets or sets the header content
+    /// </summary>
+    [Parameter]
+    public RenderFragment Header { get; set; }
+
+    /// <summary>
+    /// Gets or sets the main content
+    /// </summary>
+    [Parameter]
+    public RenderFragment Content { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the item is expanded by default
+    /// </summary>
+    [Parameter]
+    public bool ExpandedByDefault { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the item is disabled
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <inheritdoc/>
+    protected override string ComponentClass => $"vibe-accordion-item {(IsExpanded ? "vibe-accordion-item-expanded" : "")} {(Disabled ? "vibe-accordion-item-disabled" : "")}";
+
+    /// <summary>
+    /// Gets the ID of the accordion item
+    /// </summary>
+    private string ItemId => string.IsNullOrEmpty(Id) ? _id : Id;
+
+    /// <summary>
+    /// Gets whether the item is expanded
+    /// </summary>
+    private bool IsExpanded => Parent?.IsItemExpanded(ItemId) ?? false;
+
+    /// <summary>
+    /// Gets the content style based on expanded state
+    /// </summary>
+    private string ContentStyle => IsExpanded ? "" : "display: none;";
+
+    /// <summary>
+    /// Initializes the component
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        if (ExpandedByDefault && Parent != null)
+        {
+            // This will be done during rendering, so we don't need to await
+            _ = Parent.ToggleItem(ItemId, true);
+        }
+    }
+
+    /// <summary>
+    /// Toggles the expanded state
+    /// </summary>
+    private async Task ToggleExpanded()
+    {
+        if (Disabled || Parent == null)
+            return;
+
+        await Parent.ToggleItem(ItemId, !IsExpanded);
+    }
+}

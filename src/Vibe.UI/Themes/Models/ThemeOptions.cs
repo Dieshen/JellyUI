@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace VibeUI.Themes.Models
+namespace Vibe.UI.Themes.Models
 {
     /// <summary>
     /// Options for configuring themes in the application

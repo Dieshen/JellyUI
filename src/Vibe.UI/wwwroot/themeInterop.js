@@ -1,12 +1,12 @@
 // Theme management interop functions
 
-window.VibeUI = window.VibeUI || {};
-window.VibeUI.Themes = window.VibeUI.Themes || {};
+window.Vibe.UI = window.Vibe.UI || {};
+window.Vibe.UI.Themes = window.Vibe.UI.Themes || {};
 
 /**
  * Theme management interop functions
  */
-window.VibeUI.Themes = {
+window.Vibe.UI.Themes = {
     /**
      * Applies a theme to the document
      * @param {string} themeClass - CSS class for the theme
@@ -107,7 +107,7 @@ window.VibeUI.Themes = {
             mediaQuery.addEventListener('change', listener);
             
             // Store the listener reference for later cleanup
-            window.VibeUI.Themes._systemThemeListener = {
+            window.Vibe.UI.Themes._systemThemeListener = {
                 mediaQuery: mediaQuery,
                 listener: listener,
                 dotNetRef: dotNetRef
@@ -126,10 +126,10 @@ window.VibeUI.Themes = {
      */
     unregisterSystemThemeListener: function () {
         return new Promise((resolve) => {
-            const listener = window.VibeUI.Themes._systemThemeListener;
+            const listener = window.Vibe.UI.Themes._systemThemeListener;
             if (listener) {
                 listener.mediaQuery.removeEventListener('change', listener.listener);
-                delete window.VibeUI.Themes._systemThemeListener;
+                delete window.Vibe.UI.Themes._systemThemeListener;
             }
             resolve(true);
         });

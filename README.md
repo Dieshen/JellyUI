@@ -11,9 +11,10 @@ Vibe.UI is a powerful theme-enabled Blazor component library inspired by Shadcn 
 - **Customizable CSS Variables** - Fine-tune theming with an extensive set of CSS variables
 - **Auto-Detection of System Theme** - Automatically adapt to user's OS theme preference
 - **Pure Razor Components** - Built with Razor/C# with minimal JavaScript
-- **40+ Accessible UI Components** - From simple buttons to complex data tables and date pickers
+- **45+ Accessible UI Components** - From simple buttons to complex data tables and date pickers
 - **Complete Theming API** - Programmatic control over themes via C# API
 - **Theme Persistence** - Save user theme preferences across sessions
+- **Fully Shadcn UI Compatible** - Implementation matches Shadcn UI components for easy migration
 
 ## Getting Started
 
@@ -72,7 +73,7 @@ In your `App.razor` file, wrap your application with the `ThemeRoot` component:
 </ThemeRoot>
 ```
 
-### Add CSS Import
+### Add JavaScript Import
 
 In your `index.html` (for Blazor WebAssembly) or `_Host.cshtml` (for Blazor Server) file, make sure to add the Vibe.UI JavaScript:
 
@@ -115,19 +116,18 @@ In your `index.html` (for Blazor WebAssembly) or `_Host.cshtml` (for Blazor Serv
 </Card>
 ```
 
-### Theme Selector
+### Theme Components
 
-Add a theme selector to allow users to switch between available themes:
+Choose from several theme-related components to enhance your user experience:
 
 ```razor
+<!-- Simple theme toggle between light and dark -->
+<ThemeToggle />
+
+<!-- Complete dropdown theme selector -->
 <ThemeSelector Label="Choose theme:" />
-```
 
-### Theme Panel
-
-Add a complete theme customization panel:
-
-```razor
+<!-- Full theme customization panel -->
 <ThemePanel 
     Title="Theme Settings"
     CollapsiblePanel="true" 
@@ -258,19 +258,83 @@ Vibe.UI uses CSS variables for theming. Here are the main variables:
 
 ## Available Components
 
-Vibe.UI includes the following components:
+Vibe.UI includes a comprehensive set of over 45 components:
 
-- **Layout**: AspectRatio, Card, Separator, ResizablePanel
-- **Data Display**: Avatar, Badge, Table, DataTable, Progress
-- **Navigation**: Breadcrumb, Menubar, NavigationMenu, Pagination, Tabs
-- **Inputs**: Button, Checkbox, Input, Radio, Select, Slider, Switch, Textarea
-- **Disclosure**: Accordion, Collapsible, Tabs
-- **Overlay**: AlertDialog, Dialog, Drawer, ContextMenu, HoverCard, Popover
-- **Typography**: Heading, Paragraph, Text
-- **Feedback**: Alert, Progress, Skeleton, Toast
-- **Date & Time**: Calendar, DatePicker, DateRangePicker
-- **Data Entry**: Form, FormField, FormLabel, FormMessage, Select, Combobox
-- **Miscellaneous**: Command, ScrollArea, Tooltip
+### Layout Components
+- **AspectRatio** - Container maintaining a specific aspect ratio
+- **Card** - Versatile content container with header, body, and footer sections
+- **Separator** - Visual divider for content separation
+- **Resizable** - Panels with user-adjustable dimensions
+- **Sheet** - Slide-in panel for secondary content
+
+### Data Display Components
+- **Avatar** - User or entity image representations
+- **Badge** - Small status indicators or counts
+- **Table** - Standard data table for structured information
+- **DataTable** - Enhanced table with sorting, filtering, and pagination
+- **Progress** - Visual indicators of completion percentage or activity
+
+### Navigation Components
+- **Breadcrumb** - Path-based navigation indicators
+- **Menubar** - Horizontal navigation system
+- **NavigationMenu** - Hierarchical navigation structure
+- **Pagination** - Page navigation controls
+- **Tabs** - Content organization into selectable tabs
+
+### Input Components
+- **Button** - Clickable controls with multiple variants
+- **Checkbox** - Binary selection controls
+- **Input** - Text input fields
+- **Radio** - Single-selection option buttons
+- **Select** - Dropdown selection menu
+- **Slider** - Range selection control
+- **Switch** - Toggle controls
+- **TextArea** - Multi-line text input
+- **Toggle** - Alternative toggle control
+- **ColorPicker** - Visual color selection tool
+- **MultiSelect** - Selection control for multiple options
+
+### Disclosure Components
+- **Accordion** - Expandable content sections
+- **Collapsible** - Simple show/hide content panels
+- **Carousel** - Content slideshow with navigation
+
+### Overlay Components
+- **AlertDialog** - Modal dialog requiring user attention
+- **Dialog** - Standard modal window
+- **Drawer** - Side-sliding panel
+- **ContextMenu** - Right-click activated menus
+- **HoverCard** - Content preview on hover
+- **Popover** - Small content overlay on click
+- **Tooltip** - Small information popup on hover
+
+### Feedback Components
+- **Alert** - Contextual feedback messages
+- **Skeleton** - Loading state placeholders
+- **Toast** - Temporary notification messages
+
+### Date & Time Components
+- **Calendar** - Date selection calendar
+- **DatePicker** - Date selection with popup calendar
+- **DateRangePicker** - Selection control for date ranges
+
+### Form Components
+- **Form** - Organized form container
+- **FormField** - Structured form field wrapper
+- **FormLabel** - Accessible form input labels
+- **FormMessage** - Validation and help text
+- **Combobox** - Combined input and dropdown
+
+### Theme Components
+- **ThemeRoot** - Root theme provider component
+- **ThemeSelector** - UI for selecting themes
+- **ThemeToggle** - Light/dark mode toggle
+- **ThemePanel** - Complete theme customization panel
+
+### Utility Components
+- **Command** - Keyboard command palette interface
+- **ScrollArea** - Custom scrollable container
+- **DropdownMenu** - Context-specific dropdown menu
 
 ## License
 

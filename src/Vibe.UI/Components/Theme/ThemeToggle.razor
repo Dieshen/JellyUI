@@ -1,0 +1,87 @@
+@inherits Vibe.UI.Base.ThemedComponentBase
+
+<button type="button" 
+        class="@CombinedClass" 
+        @attributes="AdditionalAttributes" 
+        @onclick="ToggleTheme" 
+        title="@GetTooltip()">
+    @if (ThemeManager.CurrentTheme?.Id == "dark")
+    {
+        @if (LightIcon != null)
+        {
+            @LightIcon
+        }
+        else
+        {
+            <span class="vibe-theme-toggle-icon vibe-theme-toggle-icon-light"></span>
+        }
+    }
+    else
+    {
+        @if (DarkIcon != null)
+        {
+            @DarkIcon
+        }
+        else
+        {
+            <span class="vibe-theme-toggle-icon vibe-theme-toggle-icon-dark"></span>
+        }
+    }
+</button>
+
+@code {
+    /// <summary>
+    /// Gets or sets the icon to display when switching to dark mode
+    /// </summary>
+    [Parameter]
+    public RenderFragment DarkIcon { get; set; }
+
+    /// <summary>
+    /// Gets or sets the icon to display when switching to light mode
+    /// </summary>
+    [Parameter]
+    public RenderFragment LightIcon { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a value indicating whether to show a tooltip
+    /// </summary>
+    [Parameter]
+    public bool ShowTooltip { get; set; } = true;
+    
+    /// <summary>
+    /// Gets or sets the tooltip text for dark mode
+    /// </summary>
+    [Parameter]
+    public string DarkModeTooltip { get; set; } = "Switch to dark mode";
+    
+    /// <summary>
+    /// Gets or sets the tooltip text for light mode
+    /// </summary>
+    [Parameter]
+    public string LightModeTooltip { get; set; } = "Switch to light mode";
+
+    /// <inheritdoc/>
+    protected override string ComponentClass => "vibe-theme-toggle";
+
+    private async Task ToggleTheme()
+    {
+        if (ThemeManager.CurrentTheme?.Id == "dark")
+        {
+            await ThemeManager.SetThemeAsync("light");
+        }
+        else
+        {
+            await ThemeManager.SetThemeAsync("dark");
+        }
+    }
+
+    private string GetTooltip()
+    {
+        if (!ShowTooltip)
+            return null;
+            
+        return ThemeManager.CurrentTheme?.Id == "dark" 
+            ? LightModeTooltip 
+            : DarkModeTooltip;
+    }
+}

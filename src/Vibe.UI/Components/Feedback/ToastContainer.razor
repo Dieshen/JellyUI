@@ -1,0 +1,94 @@
+@using Vibe.UI.Services.Toast
+@implements IDisposable
+@inject IToastService ToastService
+@inherits Vibe.UI.Base.ThemedComponentBase
+
+<div class="@CombinedClass" @attributes="AdditionalAttributes">
+    @foreach (var toast in _toasts)
+    {
+        <Toast Title="@toast.Title"
+               Description="@toast.Description"
+               Variant="@toast.Variant"
+               Icon="@toast.Icon"
+               Duration="@toast.Duration"
+               ShowCloseButton="true"
+               ShowProgress="true"
+               OnClose="() => RemoveToast(toast.Id)" />
+    }
+</div>
+
+@code {
+    private List<ToastItem> _toasts = new List<ToastItem>();
+
+    [Parameter]
+    public string Position { get; set; } = "bottom-right";
+
+    [Parameter]
+    public int MaxToasts { get; set; } = 5;
+
+    protected override string ComponentClass => "vibe-toast-container";
+
+    protected override void OnInitialized()
+    {
+        ToastService.OnToastAdded += HandleToastAdded;
+        ToastService.OnToastRemoved += HandleToastRemoved;
+    }
+
+    private void HandleToastAdded(object sender, ToastEventArgs args)
+    {
+        InvokeAsync(() => {
+            var toast = new ToastItem
+            {
+                Id = args.Id,
+                Title = args.Title,
+                Description = args.Description,
+                Variant = args.Variant,
+                Icon = args.Icon,
+                Duration = args.Duration
+            };
+
+            _toasts.Add(toast);
+
+            // Enforce max number of toasts
+            while (_toasts.Count > MaxToasts)
+            {
+                _toasts.RemoveAt(0);
+            }
+
+            StateHasChanged();
+        });
+    }
+
+    private void HandleToastRemoved(object sender, ToastEventArgs args)
+    {
+        InvokeAsync(() => {
+            RemoveToast(args.Id);
+        });
+    }
+
+    private void RemoveToast(string id)
+    {
+        var toast = _toasts.FirstOrDefault(t => t.Id == id);
+        if (toast != null)
+        {
+            _toasts.Remove(toast);
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        ToastService.OnToastAdded -= HandleToastAdded;
+        ToastService.OnToastRemoved -= HandleToastRemoved;
+    }
+
+    private class ToastItem
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Variant { get; set; }
+        public string Icon { get; set; }
+        public int Duration { get; set; }
+    }
+}

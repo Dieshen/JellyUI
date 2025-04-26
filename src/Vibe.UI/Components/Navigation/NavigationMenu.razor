@@ -1,0 +1,106 @@
+@namespace Vibe.UI.Components
+@inherits Base.ThemedComponentBase
+
+<nav class="@CombinedClass">
+    <div class="navigation-menu-list">
+        @if (ChildContent != null)
+        {
+            <CascadingValue Value="this" IsFixed="true">
+                @ChildContent
+            </CascadingValue>
+        }
+        
+        @if (IsViewportIndicatorVisible)
+        {
+            <div class="navigation-menu-viewport-indicator" style="@ViewportIndicatorStyle"></div>
+        }
+    </div>
+    
+    @if (ViewportContent != null)
+    {
+        <div class="navigation-menu-viewport">
+            @ViewportContent
+        </div>
+    }
+</nav>
+
+@code {
+    /// <summary>
+    /// Gets or sets the content of the navigation menu.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the content to display in the viewport.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ViewportContent { get; set; }
+    
+    /// <summary>
+    /// Dictionary tracking the position and size of menu items.
+    /// </summary>
+    private Dictionary<string, (double Left, double Width)> ItemPositions { get; set; } = new();
+    
+    /// <summary>
+    /// Gets or sets the active menu item's ID.
+    /// </summary>
+    private string ActiveItemId { get; set; }
+    
+    /// <summary>
+    /// Gets whether the viewport indicator should be visible.
+    /// </summary>
+    private bool IsViewportIndicatorVisible => !string.IsNullOrEmpty(ActiveItemId) && ItemPositions.ContainsKey(ActiveItemId);
+    
+    /// <summary>
+    /// Gets the style for the viewport indicator.
+    /// </summary>
+    private string ViewportIndicatorStyle
+    {
+        get
+        {
+            if (IsViewportIndicatorVisible && ItemPositions.TryGetValue(ActiveItemId, out var position))
+            {
+                return $"left: {position.Left}px; width: {position.Width}px";
+            }
+            
+            return string.Empty;
+        }
+    }
+    
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-navigation-menu";
+    
+    /// <summary>
+    /// Registers a menu item's position and dimensions.
+    /// </summary>
+    /// <param name="id">The menu item's ID.</param>
+    /// <param name="left">The menu item's left position.</param>
+    /// <param name="width">The menu item's width.</param>
+    public void RegisterItem(string id, double left, double width)
+    {
+        ItemPositions[id] = (left, width);
+        StateHasChanged();
+    }
+    
+    /// <summary>
+    /// Activates a menu item.
+    /// </summary>
+    /// <param name="id">The menu item's ID.</param>
+    public void ActivateItem(string id)
+    {
+        ActiveItemId = id;
+        StateHasChanged();
+    }
+    
+    /// <summary>
+    /// Deactivates the current active menu item.
+    /// </summary>
+    public void DeactivateItem()
+    {
+        ActiveItemId = null;
+        StateHasChanged();
+    }
+}

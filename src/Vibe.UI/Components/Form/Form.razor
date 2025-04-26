@@ -1,0 +1,76 @@
+@namespace Vibe.UI.Components
+@typeparam TForm where TForm : class, new()
+@inherits Base.ThemedComponentBase
+
+<EditForm Model="@Model" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit" FormName="@FormName" class="@CombinedClass">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="validation-summary" />
+    
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</EditForm>
+
+@code {
+    /// <summary>
+    /// Gets or sets the form model.
+    /// </summary>
+    [Parameter]
+    public TForm Model { get; set; }
+
+    /// <summary>
+    /// Gets or sets the content of the form.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the form name.
+    /// </summary>
+    [Parameter]
+    public string FormName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback when the form is successfully submitted.
+    /// </summary>
+    [Parameter]
+    public EventCallback<EditContext> OnSubmit { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback when the form submission fails validation.
+    /// </summary>
+    [Parameter] 
+    public EventCallback<EditContext> OnInvalidSubmit { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-form";
+
+    /// <summary>
+    /// Initializes a new instance of the Form component.
+    /// </summary>
+    public Form()
+    {
+        // Initialize the model if it's not provided
+        Model ??= new TForm();
+    }
+
+    /// <summary>
+    /// Handles the form valid submit event.
+    /// </summary>
+    /// <param name="context">The edit context.</param>
+    private async Task HandleValidSubmit(EditContext context)
+    {
+        await OnSubmit.InvokeAsync(context);
+    }
+
+    /// <summary>
+    /// Handles the form invalid submit event.
+    /// </summary>
+    /// <param name="context">The edit context.</param>
+    private async Task HandleInvalidSubmit(EditContext context)
+    {
+        await OnInvalidSubmit.InvokeAsync(context);
+    }
+}

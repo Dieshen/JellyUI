@@ -1,0 +1,61 @@
+@namespace Vibe.UI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass" style="@SkeletonStyle">
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the width of the skeleton.
+    /// </summary>
+    [Parameter]
+    public string Width { get; set; } = "100%";
+
+    /// <summary>
+    /// Gets or sets the height of the skeleton.
+    /// </summary>
+    [Parameter]
+    public string Height { get; set; } = "1rem";
+
+    /// <summary>
+    /// Gets or sets whether the skeleton is rounded.
+    /// </summary>
+    [Parameter]
+    public bool Rounded { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the skeleton has a circle shape.
+    /// </summary>
+    [Parameter]
+    public bool Circle { get; set; }
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => GetSkeletonClass();
+
+    /// <summary>
+    /// Gets the inline style for the skeleton.
+    /// </summary>
+    private string SkeletonStyle => $"width: {Width}; height: {Height};";
+
+    /// <summary>
+    /// Gets the CSS classes for the skeleton based on properties.
+    /// </summary>
+    private string GetSkeletonClass()
+    {
+        var classes = new List<string> { "vibe-skeleton" };
+        
+        if (Rounded)
+        {
+            classes.Add("rounded");
+        }
+        
+        if (Circle)
+        {
+            classes.Add("circle");
+        }
+        
+        return string.Join(" ", classes);
+    }
+}

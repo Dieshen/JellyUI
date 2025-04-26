@@ -1,0 +1,42 @@
+.vibe-toast-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    z-index: 9999;
+    max-width: 100%;
+}
+
+/* Positioning variants */
+.vibe-toast-container.bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+.vibe-toast-container.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.vibe-toast-container.top-right {
+    top: 0;
+    right: 0;
+}
+
+.vibe-toast-container.top-left {
+    top: 0;
+    left: 0;
+}
+
+.vibe-toast-container.top-center {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.vibe-toast-container.bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}

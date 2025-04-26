@@ -1,16 +1,18 @@
 using Microsoft.Extensions.DependencyInjection;
-using VibeUI.Themes.Models;
-using VibeUI.Themes.Services;
+using Vibe.UI.Services.Dialog;
+using Vibe.UI.Services.Toast;
+using Vibe.UI.Themes.Models;
+using Vibe.UI.Themes.Services;
 
-namespace VibeUI
+namespace Vibe.UI
 {
     /// <summary>
-    /// Extension methods for registering VibeUI services with dependency injection.
+    /// Extension methods for registering Vibe.UI services with dependency injection.
     /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds VibeUI services to the service collection.
+        /// Adds Vibe.UI services to the service collection.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <returns>The service collection.</returns>
@@ -20,7 +22,7 @@ namespace VibeUI
         }
 
         /// <summary>
-        /// Adds VibeUI services to the service collection with customized theme options.
+        /// Adds Vibe.UI services to the service collection with customized theme options.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="configureOptions">The action to configure theme options.</param>
@@ -34,6 +36,10 @@ namespace VibeUI
 
             // Register the theme manager
             services.AddScoped<ThemeManager>();
+            
+            // Register toast and dialog services
+            services.AddScoped<IToastService, ToastService>();
+            services.AddScoped<IDialogService, DialogService>();
 
             return services;
         }

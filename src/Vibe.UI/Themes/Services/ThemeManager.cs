@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using VibeUI.Themes.Models;
+using Vibe.UI.Themes.Models;
 
-namespace VibeUI.Themes.Services
+namespace Vibe.UI.Themes.Services
 {
     /// <summary>
     /// Service for managing themes in the application

@@ -1,0 +1,95 @@
+@namespace Vibe.UI.Components
+@inherits Base.ThemedComponentBase
+
+<div class="@CombinedClass" @ref="DropdownRef">
+    <div class="dropdown-trigger" @onclick="ToggleDropdown">
+        @TriggerContent
+    </div>
+    
+    @if (IsOpen)
+    {
+        <div class="dropdown-content @PositionClass" style="@PositionStyle">
+            @Content
+        </div>
+        
+        <div class="dropdown-backdrop" @onclick="CloseDropdown"></div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the trigger content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment TriggerContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the dropdown content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment Content { get; set; }
+
+    /// <summary>
+    /// Gets or sets the position of the dropdown.
+    /// </summary>
+    [Parameter]
+    public string Position { get; set; } = "bottom";
+
+    /// <summary>
+    /// Gets or sets the alignment of the dropdown.
+    /// </summary>
+    [Parameter]
+    public string Align { get; set; } = "start";
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-dropdown";
+
+    /// <summary>
+    /// Gets the CSS class for the dropdown position/alignment.
+    /// </summary>
+    private string PositionClass => $"dropdown-{Position} dropdown-{Align}";
+
+    /// <summary>
+    /// Gets the inline styles for custom positioning if needed.
+    /// </summary>
+    private string PositionStyle => string.Empty;
+
+    /// <summary>
+    /// Flag to track if the dropdown is open.
+    /// </summary>
+    private bool IsOpen = false;
+
+    /// <summary>
+    /// Reference to the dropdown element.
+    /// </summary>
+    private ElementReference DropdownRef;
+
+    /// <summary>
+    /// Toggles the dropdown state.
+    /// </summary>
+    private void ToggleDropdown()
+    {
+        IsOpen = !IsOpen;
+    }
+
+    /// <summary>
+    /// Closes the dropdown.
+    /// </summary>
+    private void CloseDropdown()
+    {
+        IsOpen = false;
+    }
+
+    /// <summary>
+    /// Sets up event listeners when the component is initialized.
+    /// </summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        
+        // In a real implementation, you would use JS interop to handle click outside
+        // and other advanced positioning features
+    }
+}

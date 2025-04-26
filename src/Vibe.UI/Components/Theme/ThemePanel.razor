@@ -1,0 +1,332 @@
+@using Vibe.UI.Themes.Models
+@using Vibe.UI.Themes.Services
+@using System.Text.Json
+@inherits Vibe.UI.Base.ThemedComponentBase
+
+<div class="@CombinedClass">
+    <div class="vibe-theme-panel-header">
+        <h3 class="vibe-theme-panel-title">@Title</h3>
+        @if (CollapsiblePanel)
+        {
+            <button type="button" class="vibe-theme-panel-toggle" @onclick="TogglePanel">
+                <span class="vibe-theme-panel-toggle-icon">@(IsExpanded ? "▼" : "◀")</span>
+            </button>
+        }
+    </div>
+
+    @if (!CollapsiblePanel || IsExpanded)
+    {
+        <div class="vibe-theme-panel-content">
+            <div class="vibe-theme-panel-section">
+                <label class="vibe-theme-panel-label">Select Theme</label>
+                <select class="vibe-theme-panel-select" @onchange="OnThemeSelected">
+                    @foreach (var theme in ThemeManager.AvailableThemes)
+                    {
+                        <option value="@theme.Id" selected="@(SelectedThemeId == theme.Id)">@theme.Name</option>
+                    }
+                </select>
+            </div>
+
+            @if (SelectedTheme != null && AllowCustomization && SelectedTheme.Type != ThemeType.BuiltIn)
+            {
+                <div class="vibe-theme-panel-section">
+                    <div class="vibe-theme-panel-section-header">
+                        <h4 class="vibe-theme-panel-section-title">Customize Theme</h4>
+                        @if (HasPendingChanges)
+                        {
+                            <div class="vibe-theme-panel-actions">
+                                <button type="button" class="vibe-btn vibe-btn-small vibe-btn-primary" @onclick="ApplyChanges">Apply</button>
+                                <button type="button" class="vibe-btn vibe-btn-small vibe-btn-outline" @onclick="ResetChanges">Reset</button>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="vibe-theme-panel-variables">
+                        @foreach (var variable in CustomizedVariables)
+                        {
+                            <div class="vibe-theme-panel-variable">
+                                <label class="vibe-theme-panel-variable-label" title="@variable.Key">
+                                    @GetFriendlyVariableName(variable.Key)
+                                </label>
+                                
+                                @if (IsColorVariable(variable.Key))
+                                {
+                                    <div class="vibe-theme-panel-variable-color">
+                                        <input type="color" 
+                                               class="vibe-theme-panel-color-input" 
+                                               value="@variable.Value" 
+                                               @onchange="@(e => OnVariableChanged(variable.Key, e.Value?.ToString()))" />
+                                        <input type="text" 
+                                               class="vibe-theme-panel-color-text" 
+                                               value="@variable.Value" 
+                                               @onchange="@(e => OnVariableChanged(variable.Key, e.Value?.ToString()))" />
+                                    </div>
+                                }
+                                else if (IsBorderRadiusVariable(variable.Key))
+                                {
+                                    <input type="range" 
+                                           class="vibe-theme-panel-range" 
+                                           min="0" 
+                                           max="2" 
+                                           step="0.1" 
+                                           value="@GetRadiusValue(variable.Value)"
+                                           @onchange="@(e => OnVariableChanged(variable.Key, $"{e.Value}rem"))" />
+                                    <span class="vibe-theme-panel-value">@variable.Value</span>
+                                }
+                                else
+                                {
+                                    <input type="text" 
+                                           class="vibe-theme-panel-input" 
+                                           value="@variable.Value" 
+                                           @onchange="@(e => OnVariableChanged(variable.Key, e.Value?.ToString()))" />
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (AllowCreateTheme)
+            {
+                <div class="vibe-theme-panel-section">
+                    <h4 class="vibe-theme-panel-section-title">Create New Theme</h4>
+                    <div class="vibe-theme-panel-form">
+                        <div class="vibe-theme-panel-form-group">
+                            <label class="vibe-theme-panel-label">Name</label>
+                            <input type="text" 
+                                   class="vibe-theme-panel-input" 
+                                   placeholder="My Custom Theme" 
+                                   @bind="NewThemeName" />
+                        </div>
+                        
+                        <div class="vibe-theme-panel-form-group">
+                            <label class="vibe-theme-panel-label">Base Theme</label>
+                            <select class="vibe-theme-panel-select" @bind="BaseThemeId">
+                                @foreach (var theme in ThemeManager.AvailableThemes)
+                                {
+                                    <option value="@theme.Id">@theme.Name</option>
+                                }
+                            </select>
+                        </div>
+                        
+                        <button type="button" 
+                                class="vibe-btn vibe-btn-primary vibe-btn-small" 
+                                disabled="@string.IsNullOrWhiteSpace(NewThemeName)"
+                                @onclick="CreateNewTheme">
+                            Create Theme
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the title of the theme panel
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "Theme Settings";
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the panel can be collapsed
+    /// </summary>
+    [Parameter]
+    public bool CollapsiblePanel { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the panel is initially expanded
+    /// </summary>
+    [Parameter]
+    public bool InitiallyExpanded { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the user can customize themes
+    /// </summary>
+    [Parameter]
+    public bool AllowCustomization { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the user can create new themes
+    /// </summary>
+    [Parameter]
+    public bool AllowCreateTheme { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the callback for when a theme is selected
+    /// </summary>
+    [Parameter]
+    public EventCallback<Theme> OnThemeSelect { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback for when a theme is customized
+    /// </summary>
+    [Parameter]
+    public EventCallback<Theme> OnThemeCustomize { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback for when a theme is created
+    /// </summary>
+    [Parameter]
+    public EventCallback<Theme> OnThemeCreate { get; set; }
+
+    /// <inheritdoc/>
+    protected override string ComponentClass => "vibe-theme-panel";
+
+    private bool IsExpanded { get; set; }
+    private string SelectedThemeId { get; set; }
+    private Theme SelectedTheme => ThemeManager.AvailableThemes.FirstOrDefault(t => t.Id == SelectedThemeId);
+    private Dictionary<string, string> CustomizedVariables { get; set; } = new();
+    private Dictionary<string, string> OriginalVariables { get; set; } = new();
+    private bool HasPendingChanges => CustomizedVariables.Any(cv => !OriginalVariables.ContainsKey(cv.Key) || OriginalVariables[cv.Key] != cv.Value);
+    private string NewThemeName { get; set; }
+    private string BaseThemeId { get; set; }
+
+    /// <inheritdoc/>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        IsExpanded = InitiallyExpanded;
+        SelectedThemeId = ThemeManager.CurrentTheme?.Id ?? ThemeManager.AvailableThemes.FirstOrDefault()?.Id;
+        BaseThemeId = SelectedThemeId;
+        LoadThemeVariables();
+    }
+
+    private void TogglePanel()
+    {
+        IsExpanded = !IsExpanded;
+    }
+
+    private async Task OnThemeSelected(ChangeEventArgs args)
+    {
+        var themeId = args.Value?.ToString();
+        if (!string.IsNullOrEmpty(themeId) && themeId != SelectedThemeId)
+        {
+            SelectedThemeId = themeId;
+            LoadThemeVariables();
+            
+            await ThemeManager.SetThemeAsync(themeId);
+            
+            if (OnThemeSelect.HasDelegate)
+            {
+                await OnThemeSelect.InvokeAsync(SelectedTheme);
+            }
+        }
+    }
+
+    private void LoadThemeVariables()
+    {
+        CustomizedVariables.Clear();
+        OriginalVariables.Clear();
+        
+        if (SelectedTheme != null)
+        {
+            foreach (var variable in SelectedTheme.Variables)
+            {
+                CustomizedVariables[variable.Key] = variable.Value;
+                OriginalVariables[variable.Key] = variable.Value;
+            }
+        }
+    }
+
+    private void OnVariableChanged(string key, string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            CustomizedVariables[key] = value;
+        }
+    }
+
+    private async Task ApplyChanges()
+    {
+        if (SelectedTheme != null && HasPendingChanges)
+        {
+            await ThemeManager.UpdateThemeAsync(SelectedThemeId, CustomizedVariables);
+
+            // Update original variables to match the new values
+            OriginalVariables.Clear();
+            foreach (var variable in CustomizedVariables)
+            {
+                OriginalVariables[variable.Key] = variable.Value;
+            }
+
+            if (OnThemeCustomize.HasDelegate)
+            {
+                await OnThemeCustomize.InvokeAsync(SelectedTheme);
+            }
+        }
+    }
+
+    private void ResetChanges()
+    {
+        CustomizedVariables.Clear();
+        foreach (var variable in OriginalVariables)
+        {
+            CustomizedVariables[variable.Key] = variable.Value;
+        }
+    }
+
+    private async Task CreateNewTheme()
+    {
+        if (!string.IsNullOrWhiteSpace(NewThemeName) && !string.IsNullOrEmpty(BaseThemeId))
+        {
+            var customTheme = ThemeManager.CreateCustomTheme(
+                NewThemeName,
+                BaseThemeId,
+                new Dictionary<string, string>());
+
+            SelectedThemeId = customTheme.Id;
+            await ThemeManager.SetThemeAsync(customTheme.Id);
+            LoadThemeVariables();
+            NewThemeName = string.Empty;
+
+            if (OnThemeCreate.HasDelegate)
+            {
+                await OnThemeCreate.InvokeAsync(customTheme);
+            }
+        }
+    }
+
+    private string GetFriendlyVariableName(string cssVariable)
+    {
+        return cssVariable
+            .Replace("--vibe-", "")
+            .Replace("-", " ")
+            .Replace("foreground", "text")
+            .Split(' ')
+            .Select(word => char.ToUpper(word[0]) + word[1..])
+            .Aggregate((a, b) => $"{a} {b}");
+    }
+
+    private bool IsColorVariable(string key)
+    {
+        if (string.IsNullOrEmpty(key))
+            return false;
+
+        var value = CustomizedVariables.GetValueOrDefault(key, "");
+        return value.StartsWith("#") || 
+               value.StartsWith("rgb") || 
+               value.StartsWith("hsl") ||
+               (!key.Contains("radius") && !key.Contains("font"));
+    }
+
+    private bool IsBorderRadiusVariable(string key)
+    {
+        return key.Contains("radius");
+    }
+
+    private double GetRadiusValue(string radius)
+    {
+        if (string.IsNullOrEmpty(radius))
+            return 0.5;
+
+        var value = radius.Replace("rem", "").Replace("em", "").Replace("px", "");
+        if (double.TryParse(value, out var result))
+        {
+            return result;
+        }
+        
+        return 0.5;
+    }
+}

@@ -4,9 +4,9 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Title>VibeUI</Title>
+    <Title>Vibe.UI</Title>
     <Description>A modern Blazor component library with comprehensive theme management</Description>
-    <Authors>VibeUI Team</Authors>
+    <Authors>Vibe.UI Team</Authors>
     <PackageTags>blazor;components;ui;themes;themeable</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>

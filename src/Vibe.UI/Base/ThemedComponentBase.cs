@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VibeUI.Themes.Services;
+using Vibe.UI.Themes.Services;
 
-namespace VibeUI.Base
+namespace Vibe.UI.Base
 {
     /// <summary>
     /// Base class for all theme-aware components

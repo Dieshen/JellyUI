@@ -1,0 +1,84 @@
+@inherits Vibe.UI.Base.ThemedComponentBase
+
+<textarea class="@CombinedClass"
+          placeholder="@Placeholder"
+          disabled="@Disabled"
+          readonly="@ReadOnly"
+          rows="@Rows"
+          @attributes="AdditionalAttributes"
+          @oninput="OnInputHandler"
+          @onchange="OnChangeHandler">@Value</textarea>
+
+@code {
+    /// <summary>
+    /// Gets or sets the textarea value
+    /// </summary>
+    [Parameter]
+    public string Value { get; set; }
+
+    /// <summary>
+    /// Gets or sets the placeholder text
+    /// </summary>
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the textarea is disabled
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the textarea is read-only
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of rows for the textarea
+    /// </summary>
+    [Parameter]
+    public int Rows { get; set; } = 4;
+
+    /// <summary>
+    /// Gets or sets the callback for when the textarea value changes
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback for when the input event occurs
+    /// </summary>
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnInput { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback for when the change event occurs
+    /// </summary>
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnChange { get; set; }
+
+    /// <inheritdoc/>
+    protected override string ComponentClass => "vibe-textarea";
+
+    private async Task OnInputHandler(ChangeEventArgs args)
+    {
+        if (OnInput.HasDelegate)
+        {
+            await OnInput.InvokeAsync(args);
+        }
+
+        if (ValueChanged.HasDelegate && args.Value is string value)
+        {
+            await ValueChanged.InvokeAsync(value);
+        }
+    }
+
+    private async Task OnChangeHandler(ChangeEventArgs args)
+    {
+        if (OnChange.HasDelegate)
+        {
+            await OnChange.InvokeAsync(args);
+        }
+    }
+}

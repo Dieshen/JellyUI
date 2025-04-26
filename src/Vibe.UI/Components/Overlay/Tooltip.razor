@@ -1,0 +1,100 @@
+@namespace Vibe.UI.Components
+@inherits Base.ThemedComponentBase
+@inject IJSRuntime JSRuntime
+
+<div class="@CombinedClass" @onmouseenter="OnMouseEnter" @onmouseleave="OnMouseLeave">
+    <div class="trigger">
+        @TriggerContent
+    </div>
+    <div class="tooltip-content @(IsVisible ? "visible" : "")" style="@ContentStyle">
+        @Content
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// Gets or sets the trigger content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment TriggerContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the tooltip content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment Content { get; set; }
+
+    /// <summary>
+    /// Gets or sets the placement of the tooltip.
+    /// </summary>
+    [Parameter]
+    public string Placement { get; set; } = "top";
+
+    /// <summary>
+    /// Gets or sets the delay before showing the tooltip (in milliseconds).
+    /// </summary>
+    [Parameter]
+    public int DelayMS { get; set; } = 200;
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => $"vibe-tooltip vibe-tooltip-{Placement}";
+
+    /// <summary>
+    /// Flag to track if the tooltip is visible.
+    /// </summary>
+    private bool IsVisible = false;
+
+    /// <summary>
+    /// Gets the style for the tooltip content.
+    /// </summary>
+    private string ContentStyle => IsVisible ? "opacity: 1;" : "opacity: 0;";
+
+    /// <summary>
+    /// Timer for delayed showing of the tooltip.
+    /// </summary>
+    private System.Timers.Timer? _showTimer;
+
+    /// <summary>
+    /// Handles when the mouse enters the tooltip trigger.
+    /// </summary>
+    private void OnMouseEnter()
+    {
+        _showTimer?.Dispose();
+        _showTimer = new System.Timers.Timer(DelayMS);
+        _showTimer.Elapsed += (sender, e) =>
+        {
+            InvokeAsync(() =>
+            {
+                IsVisible = true;
+                StateHasChanged();
+            });
+        };
+        _showTimer.AutoReset = false;
+        _showTimer.Start();
+    }
+
+    /// <summary>
+    /// Handles when the mouse leaves the tooltip trigger.
+    /// </summary>
+    private void OnMouseLeave()
+    {
+        _showTimer?.Dispose();
+        IsVisible = false;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Disposes the component.
+    /// </summary>
+    /// <param name="disposing">Whether this is being called from Dispose or the finalizer.</param>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _showTimer?.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+}

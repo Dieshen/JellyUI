@@ -1,0 +1,102 @@
+@using Vibe.UI.Services.Dialog
+@implements IDisposable
+@inject IDialogService DialogService
+@inherits Vibe.UI.Base.ThemedComponentBase
+
+@if (_isOpen)
+{
+    <div class="@CombinedClass" @attributes="AdditionalAttributes">
+        <div class="vibe-dialog-overlay" @onclick="HandleBackdropClick">
+            <div class="vibe-dialog-container" @onclick:stopPropagation="true">
+                @if (!string.IsNullOrWhiteSpace(_title))
+                {
+                    <div class="vibe-dialog-header">
+                        <h2 class="vibe-dialog-title">@_title</h2>
+                        @if (ShowCloseButton)
+                        {
+                            <button class="vibe-dialog-close" @onclick="CloseDialog" type="button" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        }
+                    </div>
+                }
+                <div class="vibe-dialog-body">
+                    @_content
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool _isOpen = false;
+    private string _title;
+    private RenderFragment _content;
+    private string _dialogId;
+
+    /// <summary>
+    /// Gets or sets whether to show the close button in the dialog header.
+    /// </summary>
+    [Parameter]
+    public bool ShowCloseButton { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets whether to close the dialog when clicking on the backdrop.
+    /// </summary>
+    [Parameter]
+    public bool CloseOnBackdropClick { get; set; } = true;
+
+    /// <summary>
+    /// Gets the component CSS class name.
+    /// </summary>
+    protected override string ComponentClass => "vibe-dialog-host";
+
+    protected override void OnInitialized()
+    {
+        DialogService.OnDialogOpened += HandleDialogOpened;
+        DialogService.OnDialogClosed += HandleDialogClosed;
+    }
+
+    private void HandleDialogOpened(object sender, DialogOpenedEventArgs args)
+    {
+        InvokeAsync(() =>
+        {
+            _dialogId = args.Id;
+            _title = args.Title;
+            _content = args.Content;
+            _isOpen = true;
+            StateHasChanged();
+        });
+    }
+
+    private void HandleDialogClosed(object sender, DialogClosedEventArgs args)
+    {
+        if (args.Id == _dialogId)
+        {
+            InvokeAsync(() =>
+            {
+                _isOpen = false;
+                StateHasChanged();
+            });
+        }
+    }
+
+    private void CloseDialog()
+    {
+        DialogService.Close();
+    }
+
+    private void HandleBackdropClick()
+    {
+        if (CloseOnBackdropClick)
+        {
+            CloseDialog();
+        }
+    }
+
+    public void Dispose()
+    {
+        DialogService.OnDialogOpened -= HandleDialogOpened;
+        DialogService.OnDialogClosed -= HandleDialogClosed;
+    }
+}
