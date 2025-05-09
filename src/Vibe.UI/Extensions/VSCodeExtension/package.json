@@ -1,0 +1,37 @@
+{
+  "name": "vibe-ui-vscode-extension",
+  "displayName": "Vibe UI VSCode Extension",
+  "description": "A VSCode extension for Vibe UI",
+  "version": "0.1.0",
+  "publisher": "vibe-ui",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:vibe-ui-vscode-extension.helloWorld"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vibe-ui-vscode-extension.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3",
+    "vscode": "^1.1.37",
+    "@types/node": "^14.14.37",
+    "@types/vscode": "^1.60.0"
+  }
+}

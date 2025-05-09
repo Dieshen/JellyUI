@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+  <Metadata>
+    <Identity Id="Vibe.UI.Extensions.VS2022Extension" Version="1.0" Publisher="Vibe.UI Team" />
+    <DisplayName>Vibe.UI VS2022 Extension</DisplayName>
+    <Description xml:space="preserve">A Visual Studio 2022 extension for Vibe.UI</Description>
+    <Tags>Vibe.UI;Blazor;VS2022;Extension</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.VisualStudio.SDK" Version="[16.0,)" DisplayName="Visual Studio SDK" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.Vsix" d:Source="File" Path="bin\Debug\Vibe.UI.Extensions.VS2022Extension.dll" />
+  </Assets>
+</PackageManifest>
