@@ -97,5 +97,20 @@ namespace Vibe.UI
             
             return options;
         }
+
+        /// <summary>
+        /// Applies external stylesheets for the selected theme.
+        /// </summary>
+        /// <param name="themeManager">The theme manager.</param>
+        /// <param name="themeId">The ID of the theme to apply.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public static async Task ApplyExternalStylesheetsAsync(this ThemeManager themeManager, string themeId)
+        {
+            var theme = themeManager.AvailableThemes.FirstOrDefault(t => t.Id == themeId);
+            if (theme != null && theme.ExternalStylesheets?.Count > 0)
+            {
+                await themeManager.SetThemeAsync(theme);
+            }
+        }
     }
 }
